@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PageImage from '@/components/pageImage/PageImage.view';
+
+import './Preview.style.less';
 
 export default function Preview() {
+  const testData = [
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
+    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg'
+  ]
+
+  useEffect(() => {
+    // window.onresize = function() {
+    //   console.log()
+    // }
+  })
+
   return (
     <div className="preview">
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
-      <img src="https://img.yalayi.net/img/gallery/201/z0.jpg!mimg" alt="" width="100%" height="100%" />
+      {
+        testData.map((item, index) => {
+          return <PageImage key={index} src={item} />
+        })
+      }
+      <div className="preview-mask">
+        <div className="preview-mask-box"></div>
+      </div>
     </div>
   );
 }

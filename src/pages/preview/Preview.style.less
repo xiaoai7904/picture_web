@@ -1,0 +1,26 @@
+.preview {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    &-item {
+        width: 100%;
+        height: 600px;
+        &-bg {
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+    }
+    &-mask {
+        position: relative;
+        &-box {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 200px;
+            background-image: linear-gradient(hsla(0,0%,92.2%,0),#ebebeb);
+            text-align: center;
+            z-index: 2;
+        }
+    }
+}
