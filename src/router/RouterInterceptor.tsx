@@ -4,9 +4,9 @@ import PageView from '@/pages/pageView/PageView.view';
 import { CommonProps, Location } from '@/types/CommonProps';
 
 export interface RouteInterceptorProps extends CommonProps {
-  path: string;
-  router: any;
-  location: Location;
+  path?: string;
+  router?: any;
+  location?: Location;
 }
 
 export const RouteInterceptor = (props: RouteInterceptorProps) => {

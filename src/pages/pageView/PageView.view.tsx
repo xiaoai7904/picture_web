@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Switch, Route, Router, Redirect, HashRouter } from 'react-router-dom';
 import { TabBar } from 'antd-mobile';
 import HomeView from '@/pages/home/Home.view';
+import TagView from '@/pages/tag/Tag.view';
 
 import './PageView.style.less';
 
@@ -10,7 +12,7 @@ export default function PageView() {
     <div className="page-view">
       <TabBar unselectedTintColor="#949494" tintColor="#33A3F4" barTintColor="white">
         <TabBar.Item
-          title="Life"
+          title="首页"
           key="Life"
           icon={
             <div
@@ -60,14 +62,14 @@ export default function PageView() {
               }}
             />
           }
-          title="Koubei"
+          title="分类"
           key="Koubei"
           selected={selectedTab === 'tag'}
           onPress={() => {
             setSelectedTab('tag');
           }}
           data-seed="logId1">
-          <div>tag</div>
+          <TagView />
         </TabBar.Item>
         <TabBar.Item
           icon={
@@ -90,7 +92,7 @@ export default function PageView() {
               }}
             />
           }
-          title="Friend"
+          title="VIP说明"
           key="Friend"
           selected={selectedTab === 'vip'}
           onPress={() => {
@@ -101,7 +103,7 @@ export default function PageView() {
         <TabBar.Item
           icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
           selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
-          title="My"
+          title="我的"
           key="my"
           selected={selectedTab === 'my'}
           onPress={() => {
