@@ -3,6 +3,7 @@ import { Switch, Route, Router, Redirect, HashRouter } from 'react-router-dom';
 import { TabBar } from 'antd-mobile';
 import HomeView from '@/pages/home/Home.view';
 import TagView from '@/pages/tag/Tag.view';
+import Vip from '@/pages/vip/Vip.view';
 
 import './PageView.style.less';
 
@@ -14,26 +15,8 @@ export default function PageView() {
         <TabBar.Item
           title="首页"
           key="Life"
-          icon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
-          selectedIcon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
+          icon={<i className="iconfont icon-shouye" style={{ fontSize: '22px' }} />}
+          selectedIcon={<i className="iconfont icon-shouye" style={{ fontSize: '22px', color: '#108ee9' }} />}
           selected={selectedTab === 'home'}
           onPress={() => {
             setSelectedTab('home');
@@ -42,26 +25,8 @@ export default function PageView() {
           <HomeView />
         </TabBar.Item>
         <TabBar.Item
-          icon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
-          selectedIcon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
+          icon={<i className="iconfont icon-fenlei" style={{ fontSize: '22px' }} />}
+          selectedIcon={<i className="iconfont icon-fenlei" style={{ fontSize: '22px', color: '#108ee9' }} />}
           title="分类"
           key="Koubei"
           selected={selectedTab === 'tag'}
@@ -72,37 +37,19 @@ export default function PageView() {
           <TagView />
         </TabBar.Item>
         <TabBar.Item
-          icon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
-          selectedIcon={
-            <div
-              style={{
-                width: '22px',
-                height: '22px',
-                background:
-                  'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat',
-              }}
-            />
-          }
+          icon={<i className="iconfont icon-VIP" style={{ fontSize: '22px' }} />}
+          selectedIcon={<i className="iconfont icon-VIP" style={{ fontSize: '22px', color: '#108ee9' }} />}
           title="VIP说明"
           key="Friend"
           selected={selectedTab === 'vip'}
           onPress={() => {
             setSelectedTab('vip');
           }}>
-          <div>vip</div>
+          <Vip />
         </TabBar.Item>
         <TabBar.Item
-          icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
-          selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
+          icon={<i className="iconfont icon-wode" style={{ fontSize: '22px' }} />}
+          selectedIcon={<i className="iconfont icon-wode" style={{ fontSize: '22px', color: '#108ee9' }} />}
           title="我的"
           key="my"
           selected={selectedTab === 'my'}
