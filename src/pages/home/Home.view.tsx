@@ -10,20 +10,20 @@ export default function HomeView() {
       <NavBar
         mode="dark"
         leftContent="HaiHai"
-        rightContent={[<Icon key="0" type="search" style={{ marginRight: '16px' }} />]}
+        rightContent={[<Icon key="0" type="search"/>]}
       />
-      <Tabs tabs={tabs} initialPage={0}>
+      <Tabs tabs={tabs} initialPage={1} prerenderingSiblingsNumber={0}>
         <div className="home-item">
-          <PageList index={1}/>
+          <PageList httpParams={{opt:'free'}}/>
         </div>
         <div className="home-item">
-          <PageList index={2}/>
+          <PageList httpParams={{opt:'vip'}}/>
         </div>
         <div className="home-item">
-          <PageList index={3}/>
+          <PageList httpParams={{opt:'newest'}} />
         </div>
         <div className="home-item">
-          <PageList index={4}/>
+          <PageList httpParams={{opt:'recommend'}} />
         </div>
       </Tabs>
     </>

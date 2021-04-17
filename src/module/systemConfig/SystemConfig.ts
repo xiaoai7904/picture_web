@@ -1,18 +1,28 @@
 export default class SystemConfig {
-  // 登录
-  static login: string = '/sys/login';
-  // 登出
-  static logout: string = '/sys/logout';
-  // 获取用户信息
-  static getUserInfo: string = '/sys/menu/nav';
-  // 获取角色管理
-  static getRoleList: string = '/sys/role/list';
-  // 查询用户
-  static getUserList: string = '/sys/user/list';
+  // 首页列表
+  static articleList: string = '/api/v1/article/list';
+  // 获取作品详情列表
+  static articleGet: string = '/api/v1/article/get'
+  // 获取推荐列表
+  static articleRecommend: string = '/api/v1/article/recommend'
+  // 热门作者
+  static authorList: string = '/api/v1/author/list'
+  // 热门模特
+  static modelList:string = '/api/v1/model/list'
+  // 登陆
+  static login:string = '/api/v1/userfront/login'
+  // 忘记密码（设置密码）
+  static forgotPassword:string = '/api/v1/userfront/set-pwd'
   // 修改密码
-  static commonResetPassword: string = '/sys/user/password';
-  // 获取选中角色对应的权限列表·
-  static getRoleInfoById: string = '/sys/role/info';
-  // 系统日志
-  static getLogList: string = '/sys/log/list';
+  static setPassword: string = '/api/v1/userfront/set-pwd'
+  // 获取验证码
+  static getCode:string = '/api/v1/userfront/get-code'
+  // 校验验证码
+  static validCode: string = '/api/v1/userfront/valid-code'
+  // 登出
+  static logout:string = '/api/v1/userfront/logout'
+  // 获取用户信息
+  static getUserInfo:string = '/api/v1/userfront/user-info'
+  // 注册
+  static register:string = '/api/v1/userfront/register'
 }

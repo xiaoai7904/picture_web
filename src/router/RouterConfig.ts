@@ -7,9 +7,14 @@ export const RouterConfig = [
     component: React.lazy(() => import('@/pages/pageView/PageView.view'))
   },
   {
-    path: '/preview',
+    path: '/preview/:id',
     name: 'Preview',
     component: React.lazy(() => import('@/pages/preview/Preview.view'))
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: React.lazy(() => import('@/pages/login/Login.view'))
   },
   {
     path: '/404',

@@ -1,28 +1,48 @@
-import React from 'react';
-import { Button, Icon, ActionSheet } from 'antd-mobile';
+import React, { useEffect, useState } from 'react';
+import { Button, Icon } from 'antd-mobile';
 import PageImage from '@/components/pageImage/PageImage.view';
 import pageHistory from '@/router/PageHistory';
+import Http from '@/module/http/Http';
+import SystemConfig from '@/module/systemConfig/SystemConfig';
+import PageList from '@/components/pageList/PageList.view';
 import './Preview.style.less';
 
-export default function Preview() {
-  const testData = [
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-    'https://img.yalayi.net/img/gallery/201/z0.jpg!mimg',
-  ];
+interface resList {
+  id: number;
+  coverImage: string;
+  photoNum: string;
+  recommend: number;
+  title: string;
+}
+export default function Preview(props: any) {
+  const [imgList, setImgList] = useState<any[]>([]);
+  const routerParamsId = props.match.params.id;
+
+  const getList = async () => {
+    try {
+      const res = await Http.of()?.post(SystemConfig.articleGet, { id: routerParamsId });
+      setImgList(res.data.data.info.photoVoList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const gotoHome = () => {
     pageHistory.push('/home');
   };
 
+  useEffect(() => {
+    if (!imgList.length) {
+      getList();
+    }
+  });
+
   return (
     <div className="preview">
-      {testData.map((item, index) => {
-        return <PageImage key={index} src={item} index={index} />;
+      {imgList.map((item, index) => {
+        return <PageImage key={index} src={item.address} index={index} />;
       })}
+      {/* <PageList httpParams={{ id: routerParamsId }} httpRequest={httpRequest} renderRow={renderRow}/> */}
       <div className="preview-mask">
         <div className="preview-mask-box"></div>
       </div>
@@ -40,7 +60,7 @@ export default function Preview() {
       <div className="home-icon" onClick={gotoHome}>
         <i className="iconfont icon-shouye"></i>
       </div>
-      <Recommend />
+      <Recommend {...props} />
       <WorkDetails />
     </div>
   );
@@ -49,13 +69,23 @@ export default function Preview() {
 /**
  * 推荐列表
  */
-const Recommend = () => {
-  const data = [
-    'https://img.yalayi.net/img/gallery/492/cover.jpg!coverimg',
-    'https://img.yalayi.net/img/gallery/340/cover.jpg!coverimg',
-    'https://img.yalayi.net/img/gallery/217/cover.jpg!coverimg',
-    'https://img.yalayi.net/img/gallery/299/cover.jpg!coverimg',
-  ];
+const Recommend = (props: any) => {
+  const [recommendList, setRecommendList] = useState([]);
+  const routerParamsId = props.match.params.id;
+  const getList = async () => {
+    try {
+      const res = await Http.of()?.post(SystemConfig.articleRecommend, { id: routerParamsId });
+      setRecommendList(res.data.data.list);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (!recommendList.length) {
+      getList();
+    }
+  });
   return (
     <div className="recommend-wrap">
       <div className="recommend-title">
@@ -63,15 +93,16 @@ const Recommend = () => {
       </div>
       <div>
         <div className="recommend-list">
-          {data.map((item, index) => {
+          {recommendList.map((item: resList, index) => {
             return (
               <div key={index} className="recommend-list-item">
                 <div className="recommend-list-item-img">
-                  <img src={item} alt="" width="100%" height="100%" />
-                  <span className="pic-number">49P</span>
+                  <img src={item.coverImage} alt="" width="100%" height="100%" />
+                  <span className="pic-number">{item.photoNum}</span>
+                  {item.recommend === 1 && <span className="pic-recommend">推荐</span>}
                 </div>
                 <div className="recommend-list-item-title">
-                  <span>现实生活</span>
+                  <span>{item.title}</span>
                 </div>
               </div>
             );
@@ -97,7 +128,6 @@ const WorkDetails = () => {
     //     maskClosable: true,
     //   },
     //   buttonIndex => {
-        
     //   }
     // );
   };

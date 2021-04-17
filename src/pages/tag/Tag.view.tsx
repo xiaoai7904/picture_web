@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SearchBar } from 'antd-mobile';
+import Http from '@/module/http/Http';
+import SystemConfig from '@/module/systemConfig/SystemConfig';
 import './Tag.style.less';
 
 interface TagTitleViewProps {
@@ -17,7 +19,11 @@ const TagContentView = (props: TagContentViewProps) => {
     <div className="tag-content">
       {props.list.map((item, index) => {
         if (item.type === 'text') {
-          return <span key={index} className="tag-text">{item.title}</span>;
+          return (
+            <span key={index} className="tag-text">
+              {item.title}
+            </span>
+          );
         }
 
         return (
@@ -32,108 +38,45 @@ const TagContentView = (props: TagContentViewProps) => {
 };
 
 export default function TagView() {
-  const list = [
-    {
-      name: '推荐标签',
-      list: [
-        {
-          title: '文艺清纯',
-          type: 'text',
-        },
-        {
-          title: '气质女神',
-          type: 'text',
-        },
-        {
-          title: '气质女神1',
-          type: 'text',
-        },
-        {
-          title: '气质女神2',
-          type: 'text',
-        },
-        {
-          title: '气质女神3',
-          type: 'text',
-        },
-        {
-          title: '气质女神4',
-          type: 'text',
-        },
-      ],
-    },
-    {
-      name: '热门模特',
-      list: [
-        {
-          title: '海棠',
-          type: 'img',
-          icon: 'https://img.yalayi.net/img/models/209.jpg!coverimg',
-        },
-        {
-          title: '海棠',
-          type: 'img',
-          icon: 'https://img.yalayi.net/img/models/209.jpg!coverimg',
-        },
-        {
-          title: '海棠',
-          type: 'img',
-          icon: 'https://img.yalayi.net/img/models/209.jpg!coverimg',
-        },
-        {
-          title: '海棠',
-          type: 'img',
-          icon: 'https://img.yalayi.net/img/models/209.jpg!coverimg',
-        },
-        {
-          title: '海棠',
-          type: 'img',
-          icon: 'https://img.yalayi.net/img/models/209.jpg!coverimg',
-        },
-      ],
-    },
-    {
-        name: '热门摄影师',
-        list: [
-          {
-            title: '再小吴',
-            type: 'img',
-            icon: 'https://img.yalayi.net/img/filmmakers/20.jpg!coverimg',
-          },
-          {
-            title: '再小吴',
-            type: 'img',
-            icon: 'https://img.yalayi.net/img/filmmakers/20.jpg!coverimg',
-          },
-          {
-            title: '再小吴',
-            type: 'img',
-            icon: 'https://img.yalayi.net/img/filmmakers/20.jpg!coverimg',
-          },
-          {
-            title: '再小吴',
-            type: 'img',
-            icon: 'https://img.yalayi.net/img/filmmakers/20.jpg!coverimg',
-          },
-          {
-            title: '再小吴',
-            type: 'img',
-            icon: 'https://img.yalayi.net/img/filmmakers/20.jpg!coverimg',
-          },
-        ],
-      },
-  ];
+  const [authorList, setAuthorList] = useState([]);
+
+  const [modelList, setModelList] = useState([]);
+
+  const getAuthorList = async () => {
+    try {
+      const res = await Http.of()?.post(SystemConfig.authorList, {});
+      console.log(res);
+      // setModelList(res.data);
+    } catch (error) {}
+  };
+  const getModelList = async () => {
+    try {
+      const res = await Http.of()?.post(SystemConfig.modelList, {});
+      console.log(res);
+      // setModelList(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (!authorList.length) {
+      // getAuthorList();
+    }
+    if (!modelList.length) {
+      // getModelList();
+    }
+  });
+
   return (
     <div className="tag">
       <SearchBar placeholder="作品/模特/摄影师" maxLength={8} />
-      {list.map((item, index) => {
-        return (
-          <div className="tag-wrap" key={index}>
-            <TagTitleView name={item.name} />
-            <TagContentView list={item.list} />
-          </div>
-        );
-      })}
+      <div className="tag-wrap">
+        <TagTitleView name="热门模特" />
+        <TagContentView list={authorList} />
+      </div>
+      <div className="tag-wrap">
+        <TagTitleView name="热门摄影师" />
+        <TagContentView list={modelList} />
+      </div>
     </div>
   );
 }

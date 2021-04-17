@@ -58,7 +58,7 @@ const devServerConfig = () => (config) => {
     ...config,
     port: 3000,
     proxy: {
-      '/sys': options,
+      '/api': options,
     },
   };
 };

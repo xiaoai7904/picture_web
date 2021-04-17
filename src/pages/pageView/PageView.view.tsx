@@ -4,6 +4,7 @@ import { TabBar } from 'antd-mobile';
 import HomeView from '@/pages/home/Home.view';
 import TagView from '@/pages/tag/Tag.view';
 import Vip from '@/pages/vip/Vip.view';
+import My from '@/pages/my/My.view';
 
 import './PageView.style.less';
 
@@ -56,7 +57,7 @@ export default function PageView() {
           onPress={() => {
             setSelectedTab('my');
           }}>
-          <div>my</div>
+          <My />
         </TabBar.Item>
       </TabBar>
     </div>
