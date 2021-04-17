@@ -1,16 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import { List, NavBar } from 'antd-mobile';
+import { List, NavBar, Modal, Toast } from 'antd-mobile';
 import PageHistory from '@/router/PageHistory';
+import { useGlobalStore } from '@/store/StoreContext';
+import Http from '@/module/http/Http';
+import SystemConfig from '@/module/systemConfig/SystemConfig';
+import Utils from '@/module/utils/Utils';
 import './My.style.less';
 const Item = List.Item;
 const Brief = Item.Brief;
+const alert = Modal.alert;
+
+const vipMap: any = {
+  1: '普通用户',
+  2: '高级会员',
+};
 
 export default function My() {
-  let val = localStorage.getItem('isLogin');
-  const [isLogin] = useState(val === 'true' ? true : false);
+  let { globalStore } = useGlobalStore();
+  let token = localStorage.getItem('token');
+  const [isLogin] = useState(token ? true : false);
+  const userinfo = globalStore.userInfo;
+  console.log('my', globalStore.userInfo);
+
+  const showAlert = () => {
+    alert('提示', '您确定要退出登录吗？', [
+      { text: '取消', onPress: () => {}, style: 'default' },
+      {
+        text: '确定',
+        onPress: () => {
+          httpLogout();
+        },
+      },
+    ]);
+  };
+
+  const httpLogout = () => {
+    Http.of()
+      ?.post(SystemConfig.logout, {})
+      .then(() => {
+        globalStore.setUserInfo();
+        Toast.success('退出成功');
+        PageHistory.replace('/login');
+      });
+  };
 
   const gotoLoginPage = () => {
-    PageHistory.push(`/login`);
+    !isLogin && PageHistory.push(`/login`);
+  };
+
+  const gotoSetPwdPage = () => {
+    isLogin && PageHistory.push('/setPwd');
+  };
+
+  const logout = () => {
+    showAlert();
   };
 
   return (
@@ -25,8 +68,13 @@ export default function My() {
           onClick={() => gotoLoginPage()}>
           {isLogin && (
             <>
-              xiaoai <Brief>185****1991</Brief>
-              <Brief>会员 29后到期</Brief>
+              {userinfo.userName}{' '}
+              <i
+                className={`iconfont ${userinfo.vipGrade === 2 ? 'icon-VIP' : ''}`}
+                style={{ fontSize: '24px', color: '#f34747' }}
+              />
+              <Brief>{userinfo.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}</Brief>
+              <Brief>{vipMap[userinfo.vipGrade]}</Brief>
             </>
           )}
           {!isLogin && <span className="my-text">未登录，点击登录</span>}
@@ -34,20 +82,26 @@ export default function My() {
         <Item
           thumb={<i className="iconfont icon-chongzhi" style={{ fontSize: '22px', color: '#888' }} />}
           arrow="horizontal"
-          onClick={() => isLogin ? '' : gotoLoginPage()}>
+          onClick={() => gotoLoginPage()}>
           充值
         </Item>
         <Item
           thumb={<i className="iconfont icon-zhongzhimima" style={{ fontSize: '22px', color: '#888' }} />}
           arrow="horizontal"
-          onClick={() => isLogin ? '' : gotoLoginPage()}>
+          onClick={() => gotoSetPwdPage()}>
           设置密码
         </Item>
-        <Item
+        {/* <Item
           thumb={<i className="iconfont icon-fankui" style={{ fontSize: '22px', color: '#888' }} />}
           arrow="horizontal"
-          onClick={() => isLogin ? '' : gotoLoginPage()}>
+          onClick={() => gotoLoginPage()}>
           问题反馈
+        </Item> */}
+        <Item
+          thumb={<i className="iconfont icon-dengchu" style={{ fontSize: '22px', color: '#888' }} />}
+          arrow="horizontal"
+          onClick={() => logout()}>
+          退出登录
         </Item>
       </List>
     </div>

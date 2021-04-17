@@ -2,8 +2,8 @@ import React from 'react';
 import { GlobalStore } from './globalStore/globalStore';
 
 
-export const storesContext = React.createContext({
+export const StoresContext = React.createContext({
   globalStore: new GlobalStore(),
 });
 
-export const useGlobalStore = () => React.useContext(storesContext);
+export const useGlobalStore = () => React.useContext(StoresContext);

@@ -1,8 +1,9 @@
 import React from 'react';
-import { List, InputItem, Button } from 'antd-mobile';
+import { List, InputItem, Button, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
+import PageHistory from '@/router/PageHistory';
 import Utils from '@/module/utils/Utils';
 import './Login.style.less';
 
@@ -16,6 +17,8 @@ interface stateType {
   updatePassword: boolean;
   isRegister: boolean;
   time: number;
+  phone: string;
+  btnLoading: boolean;
 }
 interface loginParams {
   loginName: string;
@@ -36,7 +39,14 @@ interface validCodeParams {
   areaCode: string;
   code: string;
 }
-class BasicInputExample extends React.Component<props, stateType> {
+
+interface forgotPasswordParams {
+  password: string;
+  areaCode: string;
+  phone: string;
+}
+
+class Login extends React.Component<props, stateType> {
   inputRef: any;
   labelFocusInst: any;
   state: stateType = {
@@ -46,53 +56,117 @@ class BasicInputExample extends React.Component<props, stateType> {
     updatePassword: false,
     isRegister: false,
     time: 60,
+    phone: '',
+    btnLoading: false,
   };
-  componentDidMount() {}
-  handleClick = () => {
-    this.inputRef.focus();
-  };
+  componentDidMount() {
+    localStorage.removeItem('token');
+  }
   forgotPassword() {
     this.setState({ isForgot: true });
   }
   confirm() {
-    this.setState({ updatePassword: true });
+    this.setState({ btnLoading: true, time: 60, isSendCode: false }, () => {
+      this.props.form.validateFields((error: any, value: any) => {
+        if (!error) {
+          this.validCode({
+            codeType: 'resetpwd',
+            phone: value.forgotPhone,
+            areaCode: '+86',
+            code: value.forgotCode,
+          })
+            .then((data: any) => {
+              this.setState({ btnLoading: false, updatePassword: true, isForgot: false, phone: value.forgotPhone });
+            })
+            .catch(() => {
+              this.setState({ btnLoading: false });
+            });
+        } else {
+          this.setState({ btnLoading: false });
+        }
+      });
+    });
   }
-  sendCode() {
-    this.setState({ isSendCode: true });
-    let oldTime = this.state.time;
-    let timer = setInterval(() => {
-      oldTime--;
-      if (oldTime < 0) {
-        oldTime = 60;
-        clearInterval(timer);
-        this.setState({ isSendCode: false });
+  sendCode(name: string, codeType: string) {
+    this.props.form.validateFields([name], (error: any, value: any) => {
+      if (!error) {
+        this.setState({ isSendCode: true });
+        let oldTime = this.state.time;
+        let timer = setInterval(() => {
+          oldTime--;
+          if (oldTime < 0) {
+            oldTime = 60;
+            clearInterval(timer);
+            this.setState({ isSendCode: false });
+          }
+          this.setState({ time: oldTime });
+        }, 1000);
+
+        Http.of()
+          ?.post(SystemConfig.getCode, { codeType, phone: value[name], areaCode: '+86' })
+          .then((data: any) => {
+            Toast.success('验证码发送成功', 1);
+          });
+      } else {
+        this.setState({ btnLoading: false });
       }
-      this.setState({ time: oldTime });
-    }, 1000);
+    });
   }
   updatePasswordFn() {
-    this.setState({ isForgot: false, updatePassword: false, isSendCode: false });
+    this.setState({ btnLoading: true, time: 60, isSendCode: false }, () => {
+      this.props.form.validateFields((error: any, value: any) => {
+        if (!error) {
+          let params: forgotPasswordParams = {
+            password: Utils.md5(value.newPassword),
+            areaCode: '+86',
+            phone: this.state.phone,
+          };
+          Http.of()
+            ?.post(SystemConfig.forgotPassword, params)
+            .then((data: any) => {
+              Toast.success('密码修改成功');
+              this.setState({
+                btnLoading: false,
+                isForgot: false,
+                updatePassword: false,
+                isSendCode: false,
+                phone: '',
+              });
+            })
+            .catch(() => {
+              this.setState({ btnLoading: false });
+            });
+        } else {
+          this.setState({ btnLoading: false });
+        }
+      });
+    });
   }
   register() {
     this.setState({ isRegister: true });
   }
-  registerFn() {
-    const validCode = (params: validCodeParams) => {
-      return new Promise(resolve =>
-        Http.of()
-          ?.post(SystemConfig.validCode, params)
-          .then((data: any) => {
-            console.log(data);
-          })
-      );
-    };
-
-    const register = (params: registerParams) => {
+  validCode = (params: validCodeParams) => {
+    return new Promise(resolve =>
       Http.of()
-        ?.post(SystemConfig.register, params)
+        ?.post(SystemConfig.validCode, params)
         .then((data: any) => {
-          console.log(data);
-        });
+          resolve(data);
+        })
+    );
+  };
+  registerFn() {
+    const register = (params: registerParams) => {
+      this.setState({ btnLoading: true, time: 60, isSendCode: false }, () => {
+        Http.of()
+          ?.post(SystemConfig.register, params)
+          .then((data: any) => {
+            Toast.success('账号注册成功');
+            this.setState({ btnLoading: false, isRegister: false });
+          })
+          .catch(() => {
+            this.setState({ btnLoading: false });
+          });
+      });
     };
 
     this.props.form.validateFields((error: any, value: any) => {
@@ -105,7 +179,7 @@ class BasicInputExample extends React.Component<props, stateType> {
           areaCode: '+86',
           phone: value.registerPhone,
         };
-        validCode({
+        this.validCode({
           codeType: 'register',
           phone: value.registerPhone,
           areaCode: '+86',
@@ -117,8 +191,8 @@ class BasicInputExample extends React.Component<props, stateType> {
     });
   }
   login() {
+    Toast.loading('加载中...', 0);
     this.props.form.validateFields((error: any, value: any) => {
-      console.log(error, value);
       if (!error) {
         let params: loginParams = {
           loginName: value.loginPhone,
@@ -128,11 +202,14 @@ class BasicInputExample extends React.Component<props, stateType> {
         Http.of()
           ?.post(SystemConfig.login, params)
           .then((data: any) => {
-            console.log(data);
+            Toast.hide();
+            localStorage.setItem('token', data.data.data.user.token);
+            PageHistory.replace({ pathname: '/empty' });
           });
       }
     });
   }
+
   passwordShow2hidden() {
     if (this.state.showPassword) {
       return (
@@ -151,12 +228,12 @@ class BasicInputExample extends React.Component<props, stateType> {
       />
     );
   }
-  verificationCode() {
+  verificationCode(name: string, codeType: string) {
     if (this.state.isSendCode) {
       return <span>{this.state.time}秒</span>;
     }
     return (
-      <span className="send-code" onClick={() => this.sendCode()}>
+      <span className="send-code" onClick={() => this.sendCode(name, codeType)}>
         发送验证码
       </span>
     );
@@ -217,13 +294,20 @@ class BasicInputExample extends React.Component<props, stateType> {
                 {...getFieldProps('forgotCode', { rules: [{ required: true }] })}
                 placeholder="请输入验证码"
                 labelNumber={2}
-                extra={this.verificationCode()}>
+                extra={this.verificationCode('forgotPhone', 'resetpwd')}>
                 <i className="iconfont icon-mima" style={{ fontSize: '22px', color: '#888888' }} />
               </InputItem>
             </List>
 
+            <div className="login-back">
+              <span
+                onClick={() => this.setState({ updatePassword: false, isForgot: false, time: 60, isSendCode: false })}>
+                返回登录
+              </span>
+            </div>
+
             <div className="login-submit-btn">
-              <Button type="primary" onClick={() => this.confirm()}>
+              <Button loading={this.state.btnLoading} type="primary" onClick={() => this.confirm()}>
                 确 定
               </Button>
             </div>
@@ -252,8 +336,15 @@ class BasicInputExample extends React.Component<props, stateType> {
               </InputItem>
             </List>
 
+            <div className="login-back">
+              <span
+                onClick={() => this.setState({ updatePassword: false, isForgot: true, time: 60, isSendCode: false })}>
+                返回
+              </span>
+            </div>
+
             <div className="login-submit-btn">
-              <Button type="primary" onClick={() => this.updatePasswordFn()}>
+              <Button loading={this.state.btnLoading} type="primary" onClick={() => this.updatePasswordFn()}>
                 确 定
               </Button>
             </div>
@@ -285,7 +376,7 @@ class BasicInputExample extends React.Component<props, stateType> {
                 {...getFieldProps('registerCode', { rules: [{ required: true }] })}
                 placeholder="请输入验证码"
                 labelNumber={2}
-                extra={this.verificationCode()}>
+                extra={this.verificationCode('registerPhone', 'register')}>
                 <i className="iconfont icon-mima" style={{ fontSize: '22px', color: '#888888' }} />
               </InputItem>
             </List>
@@ -301,11 +392,11 @@ class BasicInputExample extends React.Component<props, stateType> {
             </List>
 
             <div className="login-back">
-              <span onClick={() => this.setState({ isRegister: false })}>返回登录</span>
+              <span onClick={() => this.setState({ isRegister: false, time: 60, isSendCode: false })}>返回登录</span>
             </div>
 
             <div className="login-submit-btn">
-              <Button type="primary" onClick={() => this.registerFn()}>
+              <Button loading={this.state.btnLoading} type="primary" onClick={() => this.registerFn()}>
                 注 册
               </Button>
             </div>
@@ -316,4 +407,4 @@ class BasicInputExample extends React.Component<props, stateType> {
   }
 }
 
-export default createForm()(BasicInputExample);
+export default createForm()(Login);

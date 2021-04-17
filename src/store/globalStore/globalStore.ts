@@ -3,35 +3,23 @@ import RouterConfig from '@/router/RouterConfig';
 
 export class GlobalStore {
   @observable
-  userInfo: userInfo = { userName: '' };
+  userInfo: userInfo = { userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
 
   @observable
-  routerList = RouterConfig;
-
-  @observable
-  menuList: any[] = [];
-
-  @observable
-  openMenuList: any[] = [];
+  selectedTab: string = 'home';
 
   @action.bound
-  setUserInfo(userInfo: userInfo) {
-    this.userInfo = userInfo;
+  setUserInfo(userInfo?: userInfo) {
+    if (!userInfo) {
+      this.userInfo = { userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
+    } else {
+      this.userInfo = userInfo;
+    }
   }
 
   @action.bound
-  setRouterList(routerList: any) {
-    this.routerList = routerList;
-  }
-
-  @action.bound
-  setMenuList(menuList: any) {
-    this.menuList = menuList;
-  }
-
-  @action.bound
-  setOpenMenuList(menuList: any) {
-    this.openMenuList = menuList;
+  setSelectedTab(tab: string) {
+    this.selectedTab = tab;
   }
 }
 
@@ -39,4 +27,8 @@ export default GlobalStore;
 
 export interface userInfo {
   userName: string;
+  phone: string;
+  vipGrade: number; // 会员标示 1 普通用户 2 会员
+  status: number; // 状态 1 启用 2 禁用
+  lastLoginTime: string;
 }

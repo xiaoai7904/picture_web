@@ -12,7 +12,7 @@ export default class SystemConfig {
   // 登陆
   static login:string = '/api/v1/userfront/login'
   // 忘记密码（设置密码）
-  static forgotPassword:string = '/api/v1/userfront/set-pwd'
+  static forgotPassword:string = '/api/v1/userfront/reset-pwd'
   // 修改密码
   static setPassword: string = '/api/v1/userfront/set-pwd'
   // 获取验证码

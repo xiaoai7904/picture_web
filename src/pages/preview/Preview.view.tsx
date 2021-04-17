@@ -5,6 +5,7 @@ import pageHistory from '@/router/PageHistory';
 import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
 import PageList from '@/components/pageList/PageList.view';
+import { useGlobalStore } from '@/store/StoreContext';
 import './Preview.style.less';
 
 interface resList {
@@ -17,7 +18,8 @@ interface resList {
 export default function Preview(props: any) {
   const [imgList, setImgList] = useState<any[]>([]);
   const routerParamsId = props.match.params.id;
-
+  const { globalStore } = useGlobalStore();
+  
   const getList = async () => {
     try {
       const res = await Http.of()?.post(SystemConfig.articleGet, { id: routerParamsId });

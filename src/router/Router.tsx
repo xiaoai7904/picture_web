@@ -6,7 +6,7 @@ import { CommonProps } from '@/types/CommonProps';
 import RouterConfig from './RouterConfig';
 
 const PageLoading = () => {
-  return <div>loading...</div>;
+  return <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center',fontSize: '18px' }}>loading...</div>;
 };
 
 export const RouterApp = (props: CommonProps): ReactElement => {

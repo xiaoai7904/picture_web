@@ -59,7 +59,7 @@ export default function TagView() {
 
   useEffect(() => {
     if (!authorList.length) {
-      // getAuthorList();
+      getAuthorList();
     }
     if (!modelList.length) {
       // getModelList();
