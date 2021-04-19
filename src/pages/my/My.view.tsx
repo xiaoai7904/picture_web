@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { List, NavBar, Modal, Toast } from 'antd-mobile';
+import { List, NavBar, Modal, Toast, WhiteSpace } from 'antd-mobile';
 import PageHistory from '@/router/PageHistory';
 import { useGlobalStore } from '@/store/StoreContext';
 import Http from '@/module/http/Http';
@@ -51,10 +51,9 @@ export default function My() {
   };
 
   return (
-    <div>
+    <div className="my">
       <NavBar onLeftClick={() => console.log('onLeftClick')}>会员中心</NavBar>
-
-      <List renderHeader={() => {}}>
+      <List>
         <Item
           arrow="horizontal"
           thumb={<i className="iconfont icon-wode" style={{ fontSize: '24px', color: '#888' }} />}
@@ -72,6 +71,20 @@ export default function My() {
             </>
           )}
           {!isLogin && <span className="my-text">未登录，点击登录</span>}
+        </Item>
+        <Item
+          arrow="horizontal"
+          thumb={<i className="iconfont icon-xin" style={{ fontSize: '24px', color: '#888' }} />}
+          multipleLine
+          onClick={() => gotoLoginPage()}>
+          我喜欢的
+        </Item>
+        <Item
+          arrow="horizontal"
+          thumb={<i className="iconfont icon-dingyue" style={{ fontSize: '24px', color: '#888' }} />}
+          multipleLine
+          onClick={() => gotoLoginPage()}>
+          我订阅的
         </Item>
         <Item
           thumb={<i className="iconfont icon-chongzhi" style={{ fontSize: '22px', color: '#888' }} />}

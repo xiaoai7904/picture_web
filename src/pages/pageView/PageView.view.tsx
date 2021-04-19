@@ -17,7 +17,7 @@ export default observer(() => {
   //     selectedTab: globalStore.selectedTab
   //   }
   // })
-  console.log('pageViewRender.....')
+  // console.log('pageViewRender.....')
 
   return (
     <div className="page-view">

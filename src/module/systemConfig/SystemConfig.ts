@@ -29,6 +29,18 @@ export default class SystemConfig {
   static commentSave: string = '/api/v1/comment/save';
   // 作品点赞
   static articleStar: string = '/api/v1/article/star';
+  // 获取评论列表
+  static commentList: string = '/api/v1/comment/list';
+  // 删除评论
+  static delComment: string = '/api/v1/userfront/comment-remove';
+  // 关注模特
+  static modelFollow: string = '/api/v1/model/follow';
+  // 关注摄影
+  static authorFollow: string = '/api/v1/author/follow';
+  // 热门标签
+  static tagList: string = '/api/v1/tag/list';
+  // 搜索
+  static articleSearch: string = '/api/v1/article/search';
 }
 
 export const vipMap: { [key: string]: any } = {

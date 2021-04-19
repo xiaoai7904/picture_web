@@ -8,13 +8,12 @@ export interface PageImageProps {
   src: string;
   index: number;
 }
-
 /**
  * 图片组件
  * @param props
  */
 const PageImage = observer((props: PageImageProps) => {
-//   const [imageHeight, setImageHeight] = useState(400);
+  //   const [imageHeight, setImageHeight] = useState(400);
   //   const [orgHeight, setOrgHeight] = useState(0);
   //   const [orgWidth, setOrgWidth] = useState(0);
 
@@ -51,8 +50,8 @@ const PageImage = observer((props: PageImageProps) => {
   const initImage = () => {
     const img = (imgIns = imgIns || new Image());
     img.onload = () => {
-        pageImageState.setOrgHeight(img.height);
-        pageImageState.setOrgWidth(img.width);
+      pageImageState.setOrgHeight(img.height);
+      pageImageState.setOrgWidth(img.width);
       resizeImg();
     };
 
@@ -74,7 +73,7 @@ const PageImage = observer((props: PageImageProps) => {
 
     return () => {
       window.removeEventListener('resize', resizeEvent);
-      imgIns = null
+      imgIns = null;
     };
   }, []);
 

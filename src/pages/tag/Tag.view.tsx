@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SearchBar } from 'antd-mobile';
 import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
+import Utils from '@/module/utils/Utils';
 import './Tag.style.less';
 
 interface TagTitleViewProps {
@@ -9,6 +10,7 @@ interface TagTitleViewProps {
 }
 interface TagContentViewProps {
   list: any[];
+  type?: string;
 }
 
 const TagTitleView = (props: TagTitleViewProps) => {
@@ -18,10 +20,10 @@ const TagContentView = (props: TagContentViewProps) => {
   return (
     <div className="tag-content">
       {props.list.map((item, index) => {
-        if (item.type === 'text') {
+        if (props.type === 'text') {
           return (
             <span key={index} className="tag-text">
-              {item.title}
+              {item.name}
             </span>
           );
         }
@@ -42,6 +44,7 @@ export default function TagView() {
 
   const [modelList, setModelList] = useState([]);
 
+  const [tagList, setTagList] = useState([]);
   const getAuthorList = async () => {
     try {
       const res = await Http.of()?.post(SystemConfig.authorList, {});
@@ -54,6 +57,20 @@ export default function TagView() {
       setModelList(res.data.data.list);
     } catch (error) {}
   };
+  const getTagList = async () => {
+    try {
+      const res = await Http.of()?.post(SystemConfig.tagList, {});
+      setTagList(res.data.data.list);
+    } catch (error) {}
+  };
+
+  const searchEvent = Utils.debounce((val: string) => {
+    Http.of()
+      ?.post(SystemConfig.articleSearch, val ? { searchName: val } : {})
+      .then((data: any) => {
+        console.log(data);
+      });
+  }, 500);
 
   useEffect(() => {
     if (!authorList.length) {
@@ -62,11 +79,18 @@ export default function TagView() {
     if (!modelList.length) {
       getModelList();
     }
+    if (!tagList.length) {
+      getTagList();
+    }
   }, []);
 
   return (
     <div className="tag">
-      <SearchBar placeholder="作品/模特/摄影师" maxLength={8} />
+      <SearchBar placeholder="作品/模特/摄影师" onChange={(val: string) => searchEvent(val)} />
+      <div className="tag-wrap">
+        <TagTitleView name="热门标签" />
+        <TagContentView list={tagList} type="text" />
+      </div>
       <div className="tag-wrap">
         <TagTitleView name="热门模特" />
         <TagContentView list={authorList} />

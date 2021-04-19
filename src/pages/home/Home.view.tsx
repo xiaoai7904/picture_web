@@ -11,10 +11,14 @@ export default function HomeView() {
   const tabs = [{ title: '免费体验' }, { title: 'VIP畅享' }, { title: '最新' }, { title: '推荐' }];
   const { globalStore } = useGlobalStore();
 
-  console.log(globalStore)
+  console.log(globalStore);
   return (
     <>
-      <NavBar mode="dark" leftContent="HaiHai" rightContent={[<Icon key="0" type="search" />]} />
+      <NavBar
+        mode="dark"
+        leftContent="HaiHai"
+        rightContent={[<Icon key="0" type="search" onClick={() => globalStore.setSelectedTab('tag')} />]}
+      />
       <Tabs tabs={tabs} initialPage={1} prerenderingSiblingsNumber={0}>
         <div className="home-item">
           <PageList httpParams={{ opt: 'free' }} />

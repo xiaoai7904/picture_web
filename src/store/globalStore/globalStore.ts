@@ -3,7 +3,7 @@ import RouterConfig from '@/router/RouterConfig';
 
 export class GlobalStore {
   @observable
-  userInfo: userInfo = { userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
+  userInfo: userInfo = { id: '', userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
 
   @observable
   selectedTab: string = 'home';
@@ -11,7 +11,7 @@ export class GlobalStore {
   @action
   setUserInfo(userInfo?: userInfo) {
     if (!userInfo) {
-      this.userInfo = { userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
+      this.userInfo = { id: '', userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
     } else {
       this.userInfo = userInfo;
     }
@@ -27,6 +27,7 @@ export class GlobalStore {
 export default GlobalStore;
 
 export interface userInfo {
+  id: number | string,
   userName: string;
   phone: string;
   vipGrade: number; // 会员标示 1 普通用户 2 会员
