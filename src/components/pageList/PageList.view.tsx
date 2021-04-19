@@ -6,6 +6,8 @@ import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
 import './PageList.style.less';
 
+const defaultImg = require('@/assets/images/404.jpg');
+
 type httpParams = {} | undefined;
 interface PageListPros {
   httpApi?: string;
@@ -58,31 +60,35 @@ export default class PageView extends React.Component<PageListPros> {
     //获取数据
     let parmas = Object.assign({ pageSize: this.state.pageSize, page: this.state.page }, this.props.httpParams);
 
-    this.httpRequest(parmas).then(({ data }: any) => {
-      const dataList = data.data.page.list;
-      const len = dataList.length;
-      if (len <= 0) {
-        // 判断是否已经没有数据了
+    this.httpRequest(parmas)
+      .then(({ data }: any) => {
+        const dataList = data.data.page.list;
+        const len = dataList.length;
+        if (len <= 0) {
+          // 判断是否已经没有数据了
+          this.setState({
+            refreshing: false,
+            isLoading: false,
+            hasMore: false,
+          });
+
+          return false;
+        }
+
+        // 这里表示上拉加载更多
+        // 合并state中已有的数据和新增的数据
+        var dataArr = this.state.dataArr.concat(dataList); //关键代码
         this.setState({
+          page: this.state.page,
+          dataSource: this.state.dataSource.cloneWithRows(dataArr), // 数据源中的数据本身是不可修改的,要更新datasource中的数据，请（每次都重新）调用cloneWithRows方法
           refreshing: false,
           isLoading: false,
-          hasMore: false,
+          dataArr: dataArr, // 保存新数据进state
         });
-
-        return false;
-      }
-
-      // 这里表示上拉加载更多
-      // 合并state中已有的数据和新增的数据
-      var dataArr = this.state.dataArr.concat(dataList); //关键代码
-      this.setState({
-        page: this.state.page,
-        dataSource: this.state.dataSource.cloneWithRows(dataArr), // 数据源中的数据本身是不可修改的,要更新datasource中的数据，请（每次都重新）调用cloneWithRows方法
-        refreshing: false,
-        isLoading: false,
-        dataArr: dataArr, // 保存新数据进state
+      })
+      .catch(() => {
+        this.setState({ refreshing: false, isLoading: false });
       });
-    });
   }
 
   httpRequest(params = {}): Promise<any> {
@@ -132,7 +138,16 @@ export default class PageView extends React.Component<PageListPros> {
       return (
         <div className="page-list-item" key={rowID} onClick={() => this.gotoPreview(rowData.id)}>
           <div className="page-list-item-img">
-            <img src={rowData.coverImage} alt="" width="100%" height="100%" />
+            <img
+              src={rowData.coverImage}
+              alt=""
+              width="100%"
+              height="100%"
+              onError={(e: any) => {
+                e.target.onerror = null;
+                e.target.src = defaultImg;
+              }}
+            />
             <span className="pic-number">{rowData.photoNum}</span>
             {rowData.recommend === 1 && <span className="pic-recommend">推荐</span>}
           </div>
@@ -142,7 +157,7 @@ export default class PageView extends React.Component<PageListPros> {
         </div>
       );
     };
-    const renderRow = this.props.renderRow ? this.props.renderRow : row
+    const renderRow = this.props.renderRow ? this.props.renderRow : row;
     return (
       <ListView
         className="page-list"

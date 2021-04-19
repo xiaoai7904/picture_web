@@ -3,24 +3,18 @@ import { List, NavBar, Modal, Toast } from 'antd-mobile';
 import PageHistory from '@/router/PageHistory';
 import { useGlobalStore } from '@/store/StoreContext';
 import Http from '@/module/http/Http';
-import SystemConfig from '@/module/systemConfig/SystemConfig';
+import SystemConfig, { vipMap } from '@/module/systemConfig/SystemConfig';
 import Utils from '@/module/utils/Utils';
 import './My.style.less';
 const Item = List.Item;
 const Brief = Item.Brief;
 const alert = Modal.alert;
 
-const vipMap: any = {
-  1: '普通用户',
-  2: '高级会员',
-};
-
 export default function My() {
   let { globalStore } = useGlobalStore();
   let token = localStorage.getItem('token');
   const [isLogin] = useState(token ? true : false);
   const userinfo = globalStore.userInfo;
-  console.log('my', globalStore.userInfo);
 
   const showAlert = () => {
     alert('提示', '您确定要退出登录吗？', [
@@ -70,7 +64,7 @@ export default function My() {
             <>
               {userinfo.userName}{' '}
               <i
-                className={`iconfont ${userinfo.vipGrade === 2 ? 'icon-VIP' : ''}`}
+                className={`iconfont ${userinfo.vipGrade !== 0 ? 'icon-VIP' : ''}`}
                 style={{ fontSize: '24px', color: '#f34747' }}
               />
               <Brief>{userinfo.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}</Brief>

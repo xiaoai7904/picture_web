@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+// import {observer, useLocalObservable} from 'mobx-react-lite'
 import { TabBar } from 'antd-mobile';
 import { useGlobalStore } from '@/store/StoreContext';
 import HomeView from '@/pages/home/Home.view';
@@ -11,6 +12,12 @@ import './PageView.style.less';
 
 export default observer(() => {
   const { globalStore } = useGlobalStore();
+  // const PageViewState = useLocalObservable(() => {
+  //   return {
+  //     selectedTab: globalStore.selectedTab
+  //   }
+  // })
+  console.log('pageViewRender.....')
 
   return (
     <div className="page-view">

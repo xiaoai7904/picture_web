@@ -171,11 +171,86 @@
   .btn::before {
     border-color: #f34747 !important;
   }
-  .left {
+  .left,
+  .common {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     color: #686868;
     font-size: 16px;
+    cursor: pointer;
+  }
+  .start {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #686868;
+    font-size: 16px;
+    margin: 0 20px;
+    cursor: pointer;
+  }
+  &-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+.details {
+  height: 80vh;
+  overflow: auto;
+
+  &-title {
+    height: 40px;
+    line-height: 40px;
+    background-color: #fff;
+    border-bottom: 1px solid #c3c3c3;
+    font-size: 16px;
+  }
+  &-wrap {
+    padding: 10px 15px;
+  }
+  &-person {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #c3c3c3;
+    padding: 5px 0 10px 0;
+    &-left {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    &-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    &-type {
+      display: inline-block;
+      padding: 1px 10px;
+      background-color: royalblue;
+      text-align: center;
+      font-size: 14px;
+      color: #fff;
+      margin: 0 15px;
+      border-radius: 8px;
+    }
+    &-name {
+      font-size: 14px;
+      color: #333;
+    }
+    &-like {
+      border: 0;
+      outline: 0;
+      padding: 5px 10px;
+      background-color: #f34747;
+      color: #fff;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+  }
+  &-info {
+    text-align: left;
   }
 }

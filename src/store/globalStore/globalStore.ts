@@ -8,7 +8,7 @@ export class GlobalStore {
   @observable
   selectedTab: string = 'home';
 
-  @action.bound
+  @action
   setUserInfo(userInfo?: userInfo) {
     if (!userInfo) {
       this.userInfo = { userName: '', phone: '', vipGrade: 1, status: 1, lastLoginTime: '' };
@@ -17,8 +17,9 @@ export class GlobalStore {
     }
   }
 
-  @action.bound
+  @action
   setSelectedTab(tab: string) {
+    console.log(tab)
     this.selectedTab = tab;
   }
 }

@@ -28,8 +28,8 @@ const TagContentView = (props: TagContentViewProps) => {
 
         return (
           <div key={index} className="tag-img">
-            <img src={item.icon} alt="" />
-            <div className="tag-img-text">{item.title}</div>
+            <img src={item.headImage} alt="" />
+            <div className="tag-img-text">{item.name}</div>
           </div>
         );
       })}
@@ -45,15 +45,13 @@ export default function TagView() {
   const getAuthorList = async () => {
     try {
       const res = await Http.of()?.post(SystemConfig.authorList, {});
-      console.log(res);
-      // setModelList(res.data);
+      setAuthorList(res.data.data.list);
     } catch (error) {}
   };
   const getModelList = async () => {
     try {
       const res = await Http.of()?.post(SystemConfig.modelList, {});
-      console.log(res);
-      // setModelList(res.data);
+      setModelList(res.data.data.list);
     } catch (error) {}
   };
 
@@ -62,9 +60,9 @@ export default function TagView() {
       getAuthorList();
     }
     if (!modelList.length) {
-      // getModelList();
+      getModelList();
     }
-  });
+  }, []);
 
   return (
     <div className="tag">
