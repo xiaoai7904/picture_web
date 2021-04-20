@@ -9,6 +9,7 @@ import './Recharge.style.less';
 export default function Recharge() {
   const [rechargeList, setRechargeList] = useState([]);
   const requestConfig = () => {
+    Toast.loading('加载中...');
     Http.of()
       ?.post(SystemConfig.getUpgrade, {})
       .then((data: any) => {
