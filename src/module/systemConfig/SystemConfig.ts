@@ -41,6 +41,12 @@ export default class SystemConfig {
   static tagList: string = '/api/v1/tag/list';
   // 搜索
   static articleSearch: string = '/api/v1/article/search';
+  // 我订阅的
+  static userfrontCommentList: string = '/api/v1/userfront/comment-list';
+  // 我的喜欢的
+  static userfrontFollowList: string = '/api/v1/userfront/follow-list';
+  // 充值配置
+  static getUpgrade: string = '/api/v1/config/get-upgrade';
 }
 
 export const vipMap: { [key: string]: any } = {
@@ -48,4 +54,9 @@ export const vipMap: { [key: string]: any } = {
   1: 'VIP1',
   2: 'VIP2',
   3: 'VIP3',
+};
+
+export const rechargeTypeMap: { [key: string]: any } = {
+  1: '年',
+  2: '月',
 };

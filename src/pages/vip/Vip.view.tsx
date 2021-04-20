@@ -9,7 +9,7 @@ const __html = `<div style="color: #71767a;zoom:1; overflow:auto; clear:both; ma
     <p style=" padding:5px 0px;">1、除免费欣赏作品外，其他所有的作品均为VIP会员才可以订阅欣赏，图片作品需要VIP1或以上，视频需要VIP2或以上等级。</p>
     <p style=" padding:5px 0px;">2、作品列表里面的作品，所有VIP会员均可直接欣赏、下载等。精选作品及视频，需要花费一定数量的H币才可以订阅欣赏。</p>
     <p style=" padding:5px 0px;">3、H币做为订阅精选作品和视频用的一种虚拟币，开通会员时均有赠送一定数量的H币，H币用完后，可通过充值购买。</p>
-    <p style=" padding:5px 0px;">4、客服：xiaoai7904@gmail.com，有问题请联系。</p>
+    <p style=" padding:5px 0px;">4、客服：haihai@gmail.com，有问题请联系。</p>
 
     <fieldset style="text-align:center;margin-bottom:10px;padding: 0;border-width: 1px; border-style:solid;border-color: #e6e6e6;margin: 5px 0 5px; border-width: 1px 0 0;">
         <legend style="margin-left: 20px; margin-top:30px;  padding-left: 20px;padding-right: 20px; font-size: 18px;font-weight: 300;">

@@ -1,0 +1,78 @@
+.recharge {
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-gap: 10px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    .actived {
+      border: 3px solid #f93030;
+    }
+    &-item {
+      border: 2px solid #c5947e;
+      border-radius: 5px;
+      position: relative;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 30px;
+      &--title {
+        font-size: 16px;
+      }
+      &--val {
+        font-size: 12px;
+        color: #fe9175;
+        font-style: oblique;
+        margin-top: 5px;
+      }
+      &--money {
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background: #c5947e;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 700;
+      }
+      &--discount {
+        margin-top: 5px;
+        color: #f93030;
+        font-size: 18px;
+      }
+    }
+  }
+  &-title {
+    padding: 10px 15px;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  &-pay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &-zfb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    padding: 8px 15px;
+    background: #108ee9;
+    border-radius: 40px;
+    color: #fff;
+    .text {
+      margin-left: 5px;
+    }
+  }
+  &-info {
+    padding: 0 15px;
+  }
+}

@@ -39,7 +39,7 @@ const PageImage = observer((props: PageImageProps) => {
   const ratio = () => pageImageState.orgWidth / pageImageState.orgHeight;
   // 自适应图片
   const resizeImg = () => {
-    let $$pageImage = document.querySelectorAll('.page-image')[props.index];
+    let $$pageImage = document.getElementById(`pageImage${props.index}`) //document.querySelectorAll('.page-image')[props.index];
     if ($$pageImage) {
       let w = $$pageImage.getClientRects()[0].width;
       pageImageState.setImageHeight(w / ratio());
@@ -78,7 +78,7 @@ const PageImage = observer((props: PageImageProps) => {
   }, []);
 
   return (
-    <div className="page-image" style={{ height: pageImageState.imageHeight + 'px' }}>
+    <div id={`pageImage${props.index}`} className="page-image" style={{ height: pageImageState.imageHeight + 'px' }}>
       <div className="page-image-bg" style={{ backgroundImage: `url(${props.src})` }}></div>
       <img className="page-image-img" src={props.src} alt="haihai" width="100%" height="100%" draggable="true" />
     </div>

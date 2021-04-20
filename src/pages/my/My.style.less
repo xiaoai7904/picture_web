@@ -1,9 +1,40 @@
-
 .my {
   background-color: #f7f2ef;
+  .am-button {
+    vertical-align: -10px;
+    margin-left: 10px;
+  }
 }
 .my-text {
   font-size: 16px;
   color: #108ee9;
   cursor: pointer;
+}
+.my-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: #fff;
+  margin-bottom: 20px;
+  &-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+  }
+  &-center {
+    border-left: 1px solid #ebebeb;
+    border-right: 1px solid #ebebeb;
+  }
+  .title {
+    color: #999;
+    padding-top: 5px;
+    font-size: 13px;
+  }
+  .val {
+    color: #1a1a1a;
+    font-size: 16px;
+  }
 }

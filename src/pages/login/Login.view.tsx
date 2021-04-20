@@ -72,7 +72,7 @@ class Login extends React.Component<props, stateType> {
           this.validCode({
             codeType: 'resetpwd',
             phone: value.forgotPhone,
-            areaCode: '+86',
+            areaCode: '86',
             code: value.forgotCode,
           })
             .then((data: any) => {
@@ -103,7 +103,7 @@ class Login extends React.Component<props, stateType> {
         }, 1000);
 
         Http.of()
-          ?.post(SystemConfig.getCode, { codeType, phone: value[name], areaCode: '+86' })
+          ?.post(SystemConfig.getCode, { codeType, phone: value[name], areaCode: '86' })
           .then((data: any) => {
             Toast.success('验证码发送成功', 1);
           });
@@ -118,7 +118,7 @@ class Login extends React.Component<props, stateType> {
         if (!error) {
           let params: forgotPasswordParams = {
             password: Utils.md5(value.newPassword),
-            areaCode: '+86',
+            areaCode: '86',
             phone: this.state.phone,
           };
           Http.of()
@@ -176,13 +176,13 @@ class Login extends React.Component<props, stateType> {
           loginName: value.registerUserName,
           password: Utils.md5(value.registerPassword),
           code: value.registerCode,
-          areaCode: '+86',
+          areaCode: '86',
           phone: value.registerPhone,
         };
         this.validCode({
           codeType: 'register',
           phone: value.registerPhone,
-          areaCode: '+86',
+          areaCode: '86',
           code: value.registerCode,
         }).then(() => {
           register(params);

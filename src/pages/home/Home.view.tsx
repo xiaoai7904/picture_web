@@ -11,7 +11,6 @@ export default function HomeView() {
   const tabs = [{ title: '免费体验' }, { title: 'VIP畅享' }, { title: '最新' }, { title: '推荐' }];
   const { globalStore } = useGlobalStore();
 
-  console.log(globalStore);
   return (
     <>
       <NavBar

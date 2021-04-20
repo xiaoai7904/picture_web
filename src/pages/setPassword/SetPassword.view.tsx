@@ -27,7 +27,7 @@ function SetPassword(props: any) {
       if (!error) {
         let params: setPasswordParams = {
           phone: globalStore.userInfo.phone,
-          areaCode: '+86',
+          areaCode: '86',
           oldPassword: Utils.md5(value.oldPassword),
           password: Utils.md5(value.newPassword),
         };

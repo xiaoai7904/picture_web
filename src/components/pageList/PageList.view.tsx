@@ -4,9 +4,8 @@ import PageHistory from '@/router/PageHistory';
 import { ListView, PullToRefresh } from 'antd-mobile';
 import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
+import PageListItem from './PageListItem.view';
 import './PageList.style.less';
-
-const defaultImg = require('@/assets/images/404.jpg');
 
 type httpParams = {} | undefined;
 interface PageListPros {
@@ -48,7 +47,7 @@ export default class PageView extends React.Component<PageListPros> {
     setTimeout(() => {
       let $$el: any = ReactDOM.findDOMNode(this.lv)?.parentNode;
       let $$bottomBar: any = document.querySelector('.am-tab-bar-bar');
-      let bottomBarHeight: number = $$bottomBar ? $$bottomBar.offsetHeight : 50;
+      let bottomBarHeight: number = $$bottomBar ? $$bottomBar.offsetHeight : 0;
       let offsetTop: number = $$el ? $$el.getClientRects()[0].top : 80;
       const hei = document.documentElement.clientHeight - offsetTop - bottomBarHeight;
 
@@ -104,7 +103,8 @@ export default class PageView extends React.Component<PageListPros> {
       {
         refreshing: true,
         isLoading: true,
-        page: 1, // 刷新嘛，一般加载第一页，或者按你自己的逻辑（比如每次刷新，换一个随机页码）
+        page: 1,
+        dataArr: [],
       },
       () => {
         this.getData();
@@ -130,32 +130,12 @@ export default class PageView extends React.Component<PageListPros> {
   };
 
   gotoPreview = (id: number) => {
-    PageHistory.push(`/preview/${id}`);
+    PageHistory.push({ pathname: `/preview`, state: { routerParamsId: id } });
   };
 
   render() {
     const row = (rowData: any, sectionID: any, rowID: any) => {
-      return (
-        <div className="page-list-item" key={rowID} onClick={() => this.gotoPreview(rowData.id)}>
-          <div className="page-list-item-img">
-            <img
-              src={rowData.coverImage}
-              alt=""
-              width="100%"
-              height="100%"
-              onError={(e: any) => {
-                e.target.onerror = null;
-                e.target.src = defaultImg;
-              }}
-            />
-            <span className="pic-number">{rowData.photoNum}</span>
-            {rowData.recommend === 1 && <span className="pic-recommend">推荐</span>}
-          </div>
-          <div className="page-list-item-title">
-            <span>{rowData.title}</span>
-          </div>
-        </div>
-      );
+      return <PageListItem rowData={rowData} index={rowID} />;
     };
     const renderRow = this.props.renderRow ? this.props.renderRow : row;
     return (

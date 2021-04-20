@@ -1,0 +1,39 @@
+.home-page {
+  &-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 10px;
+    background-image: url('../../assets/images/model_top_bg.png');
+    background-size: cover;
+    color: #fff;
+    height: 150px;
+  }
+  &-title {
+    padding: 10px;
+    margin: 0;
+  }
+  .user-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  .user-info {
+    margin-left: 10px;
+    h3 {
+      margin: 0;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    span {
+      font-size: 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      color: #fff;
+    }
+  }
+}
