@@ -46,7 +46,7 @@ export default function MyLike() {
         <div className="my-like-item">
           <PageList httpRequest={httpRequest} httpParams={{ type: 1 }} />
         </div>
-        <div className="my-like-item">
+        <div className="my-like-item my-like-tag">
           <PageList httpRequest={httpRequest} httpParams={{ type: 2 }} renderRow={rowRender} />
         </div>
         <div className="my-like-item">

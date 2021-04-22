@@ -46,7 +46,7 @@ export default function Preview(props: any) {
   const location: any = pageHistory.location;
   const [resData, setResData] = useState<any>({});
   const [imgList, setImgList] = useState<any[]>([]);
-  const [routerParamsId, setRouterParamsId] = useState('')
+  const [routerParamsId, setRouterParamsId] = useState('');
   const { globalStore } = useGlobalStore();
 
   const getList = (params: perviewListParams) => {
@@ -73,6 +73,10 @@ export default function Preview(props: any) {
     pageHistory.replace('/login');
   };
 
+  const gotoRecharge = () => {
+    PageHistory.push('/recharge');
+  };
+
   const changeEvent = (id: string) => {
     getList({ id }).then(() => {
       let $$preview = document.querySelector('.preview');
@@ -85,7 +89,7 @@ export default function Preview(props: any) {
   useEffect(() => {
     if (location.state) {
       const routerParamsId = location.state.routerParamsId;
-      setRouterParamsId(routerParamsId)
+      setRouterParamsId(routerParamsId);
       if (!imgList.length) {
         getList({ id: routerParamsId });
       }
@@ -101,7 +105,7 @@ export default function Preview(props: any) {
       })}
       {/* <PageList httpParams={{ id: routerParamsId }} httpRequest={httpRequest} renderRow={renderRow}/> */}
       {(!globalStore.userInfo.phone ||
-        globalStore.userInfo.vipGrade === 0 ||
+        globalStore.userInfo.remaining === 0 ||
         globalStore.userInfo.vipGrade < resData.vipLevel) && (
         <div className="preview-mask">
           <div className="preview-mask-box"></div>
@@ -124,18 +128,21 @@ export default function Preview(props: any) {
             </div>
           </>
         )}
-        {(globalStore.userInfo.vipGrade === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) && (
-          <div className="btn-wrap">
-            <Button className="btn" inline size="small" type="primary">
-              开通VIP
-            </Button>
-          </div>
+        {(globalStore.userInfo.remaining === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) && (
+          <>
+            <p>您的会员等级不够，请升级</p>
+            <div className="btn-wrap">
+              <Button className="btn" inline size="small" type="primary" onClick={() => gotoRecharge()}>
+                开通VIP
+              </Button>
+            </div>
+          </>
         )}
       </div>
       <div className="home-icon" onClick={gotoHome}>
         <i className="iconfont icon-shouye"></i>
       </div>
-      <Recommend {...props} onChange={changeEvent} routerParamsId={routerParamsId}/>
+      <Recommend {...props} onChange={changeEvent} routerParamsId={routerParamsId} />
       <WorkDetails resData={resData} />
     </div>
   );
@@ -165,6 +172,7 @@ const Recommend = (props: any) => {
       getList();
     }
   }, [props.routerParamsId]);
+  
   return (
     <div className="recommend-wrap">
       <div className="recommend-title">
@@ -201,7 +209,7 @@ const WorkDetailsView = (props: any) => {
   const [detailsModalShow, setDetailsModalShow] = useState(false);
   const [commentModalShow, setCommentModalShow] = useState(false);
   const [personInfo, setPersonInfo] = useState<any[]>([]);
-  const [star, setStar] = useState(resData.isStar === 1);
+  const [star, setStar] = useState(false);
   const [starNumber, setStarNumber] = useState(0);
   const [commentList, setCommentList] = useState<any[]>([]);
   const [commentVal, setCommentVal] = useState('');
@@ -212,7 +220,9 @@ const WorkDetailsView = (props: any) => {
   const gotoLogin = () => {
     PageHistory.replace('/login');
   };
-
+  const gotoRecharge = () => {
+    PageHistory.push('/recharge');
+  };
   // 评论
   const httpComment = (params: commentParams) => {
     return new Promise((resolve, reject) => {
@@ -269,7 +279,7 @@ const WorkDetailsView = (props: any) => {
     Http.of()
       ?.post(SystemConfig.articleStar, { id: resData.id })
       .then((data: any) => {
-        let n = starNumber || resData.star;
+        let n = starNumber;
         setStar(data.data.data.result === 1 ? true : false);
         setStarNumber(data.data.data.result === 1 ? ++n : --n);
         Toast.hide();
@@ -370,6 +380,8 @@ const WorkDetailsView = (props: any) => {
       },
       { id: 2, name: resData.model, type: '摄影', img: resData.modelHead, isLike: resData.authorFollow === 1 },
     ]);
+    setStar(resData.isStar === 1);
+    setStarNumber(resData.star);
   }, [resData]);
 
   const commentListItemRender = (item: commentListItem) => {
@@ -404,7 +416,7 @@ const WorkDetailsView = (props: any) => {
           </div>
           <div className="start" onClick={() => starEvent()}>
             <i className="iconfont icon-xin" style={{ fontSize: '22px', color: star ? '#f34747' : '#888888' }} />
-            <span>&nbsp;{starNumber || resData.star}</span>
+            <span>&nbsp;{starNumber}</span>
           </div>
           <div className="common" onClick={() => commentEvent()}>
             <i className="iconfont icon-pinglun" style={{ fontSize: '22px', color: '#888888' }} />
@@ -416,8 +428,8 @@ const WorkDetailsView = (props: any) => {
             点击登陆
           </Button>
         )}
-        {globalStore.userInfo.vipGrade === 0 && (
-          <Button className="btn" inline size="small" type="primary">
+        {(globalStore.userInfo.remaining === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) && (
+          <Button className="btn" inline size="small" type="primary" onClick={() => gotoRecharge()}>
             开通VIP
           </Button>
         )}
@@ -431,7 +443,10 @@ const WorkDetailsView = (props: any) => {
               return (
                 <div key={index} className="details-person">
                   <div className="details-person-left">
-                    <img className="details-person-icon" src={item.img} alt="" />
+                    {!item.img && <i className="iconfont icon-yonghu1" style={{ fontSize: '30px', color: '#888' }} />}
+                    {item.img && (
+                      <img className="details-person-icon" src={item.img} alt="用户头像" width="50" height="50" />
+                    )}
                     <span className="details-person-type">{item.type}</span>
                     <span className="details-person-name">{item.name}</span>
                   </div>
@@ -459,7 +474,7 @@ const WorkDetailsView = (props: any) => {
                 </p>
                 <p>
                   <span>作品简介:&nbsp;</span>
-                  <span>{resData.remark}</span>
+                  <span>{resData.remark || '暂无简介'}</span>
                 </p>
               </div>
             </div>

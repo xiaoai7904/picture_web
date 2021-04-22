@@ -47,6 +47,8 @@ export default class SystemConfig {
   static userfrontFollowList: string = '/api/v1/userfront/follow-list';
   // 充值配置
   static getUpgrade: string = '/api/v1/config/get-upgrade';
+  // 支付
+  static orderTransaction: string = '/api/v1/order/transaction';
 }
 
 export const vipMap: { [key: string]: any } = {

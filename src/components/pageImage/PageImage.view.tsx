@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { observer, useLocalStore } from 'mobx-react';
 import Utils from '@/module/utils/Utils';
-
 import './PageImage.style.less';
+require('intersection-observer');
 
 export interface PageImageProps {
   src: string;
@@ -22,6 +22,7 @@ const PageImage = observer((props: PageImageProps) => {
       imageHeight: 400,
       orgHeight: 0,
       orgWidth: 0,
+      isShow: false,
       setImageHeight(height: number) {
         pageImageState.imageHeight = height;
       },
@@ -31,6 +32,9 @@ const PageImage = observer((props: PageImageProps) => {
       setOrgHeight(height: number) {
         pageImageState.orgHeight = height;
       },
+      setIsShow(val: boolean) {
+        pageImageState.isShow = val;
+      },
     };
   });
   let imgIns: any = null;
@@ -39,7 +43,7 @@ const PageImage = observer((props: PageImageProps) => {
   const ratio = () => pageImageState.orgWidth / pageImageState.orgHeight;
   // 自适应图片
   const resizeImg = () => {
-    let $$pageImage = document.getElementById(`pageImage${props.index}`) //document.querySelectorAll('.page-image')[props.index];
+    let $$pageImage = document.getElementById(`pageImage${props.index}`); //document.querySelectorAll('.page-image')[props.index];
     if ($$pageImage) {
       let w = $$pageImage.getClientRects()[0].width;
       pageImageState.setImageHeight(w / ratio());
@@ -62,13 +66,34 @@ const PageImage = observer((props: PageImageProps) => {
     resizeImg();
   }, 500);
 
+  const handler = (entries: any, intersectionObserver: any) => {
+    entries.forEach((item: any) => {
+      // 遍历entries数组
+      if (item.isIntersecting) {
+        // 当前元素可见
+        console.log(props.index, 'Loaded new items', entries);
+        pageImageState.setIsShow(true);
+        initImage();
+        intersectionObserver.unobserve(item.target); // 停止观察当前元素 避免不可见时候再次调用callback函数
+      }
+    });
+  };
   // 绑定事件
   const bingEvent = () => {
     window.addEventListener('resize', resizeEvent);
+
+    let intersectionObserver: any;
+    intersectionObserver = new IntersectionObserver(function (entries: any) {
+      handler(entries, intersectionObserver);
+    });
+    let $$pageImage = document.getElementById(`pageImage${props.index}`);
+    if ($$pageImage) {
+      intersectionObserver.observe($$pageImage);
+    }
   };
 
   useEffect(() => {
-    initImage();
+    // initImage();
     bingEvent();
 
     return () => {
@@ -79,8 +104,17 @@ const PageImage = observer((props: PageImageProps) => {
 
   return (
     <div id={`pageImage${props.index}`} className="page-image" style={{ height: pageImageState.imageHeight + 'px' }}>
-      <div className="page-image-bg" style={{ backgroundImage: `url(${props.src})` }}></div>
-      <img className="page-image-img" src={props.src} alt="haihai" width="100%" height="100%" draggable="true" />
+      <div
+        className="page-image-bg"
+        style={{ backgroundImage: `url(${pageImageState.isShow ? props.src : ''})` }}></div>
+      <img
+        className="page-image-img"
+        src={pageImageState.isShow ? props.src : ''}
+        alt="haihai"
+        width="100%"
+        height="100%"
+        draggable="true"
+      />
     </div>
   );
 });

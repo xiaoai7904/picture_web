@@ -1,13 +1,16 @@
 .recharge {
   &-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     grid-gap: 10px;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
-    .actived {
-      border: 3px solid #f93030;
+    .actived-line {
+      border-color: #f93030;
+    }
+    .actived-money {
+      background: #f93030;
     }
     &-item {
       border: 2px solid #c5947e;
