@@ -172,7 +172,7 @@ const Recommend = (props: any) => {
       getList();
     }
   }, [props.routerParamsId]);
-  
+
   return (
     <div className="recommend-wrap">
       <div className="recommend-title">
@@ -313,10 +313,10 @@ const WorkDetailsView = (props: any) => {
     });
   };
   // 删除评论
-  const delComment = () => {
+  const delComment = (id: number) => {
     Toast.loading('加载中...');
     Http.of()
-      ?.post(SystemConfig.delComment, { id: resData.id })
+      ?.post(SystemConfig.delComment, { id })
       .then(() => {
         updateScrollTop();
         setHasMore(true);
@@ -399,7 +399,7 @@ const WorkDetailsView = (props: any) => {
         {item.userFrontId === globalStore.userInfo.id && (
           <i
             className="iconfont icon-shanchu"
-            onClick={() => delComment()}
+            onClick={() => delComment(item.id)}
             style={{ fontSize: '18px', color: '#888' }}
           />
         )}
