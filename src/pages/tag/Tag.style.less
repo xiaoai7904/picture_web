@@ -1,12 +1,17 @@
 .tag {
   background: #f7f2ef;
   height: calc(100vh - 50px);
+  height: calc(100vh - var(--vh-offset, 0px) - 50px);
   overflow: auto;
   &-search {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    z-index: 99;
+  }
+  &-list {
+    // padding-top: 44px;
   }
   &-wrap {
     margin-bottom: 10px;

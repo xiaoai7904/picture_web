@@ -161,7 +161,9 @@ class Login extends React.Component<props, stateType> {
           ?.post(SystemConfig.register, params)
           .then((data: any) => {
             Toast.success('账号注册成功');
-            this.setState({ btnLoading: false, isRegister: false });
+            // this.setState({ btnLoading: false, isRegister: false });
+            localStorage.setItem('token', data.data.data.user.token);
+            PageHistory.replace({ pathname: '/empty' });
           })
           .catch(() => {
             this.setState({ btnLoading: false });
@@ -242,7 +244,7 @@ class Login extends React.Component<props, stateType> {
     const { getFieldProps } = this.props.form;
     return (
       <div className="login">
-        <h1 className="login-title">HaiHai</h1>
+        <h1 className="login-title">嗨嗨美影社</h1>
         {!this.state.isForgot && !this.state.isRegister && !this.state.updatePassword && (
           <div>
             <List className="login-phone">

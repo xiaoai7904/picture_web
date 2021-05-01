@@ -49,6 +49,18 @@ export default class SystemConfig {
   static getUpgrade: string = '/api/v1/config/get-upgrade';
   // 支付
   static orderTransaction: string = '/api/v1/order/transaction';
+  // 订阅
+  static authorSubscribe:string = '/api/v1/author/subscribe';
+  // vip说明
+  static configRecharge:string = '/api/v1/config/recharge'
+  // 我的订阅列表
+  static subscribeList:string = '/api/v1/userfront/subscribe-list'
+  // 客服配置
+  static configCustomer:string = '/api/v1/config/customer'
+  // 兑换
+  static exchangeChange:string = '/api/v1/exchange/change'
+  // 查询是否订阅
+  static isSubscribe:string = '/api/v1/author/is-subscribe'
 }
 
 export const vipMap: { [key: string]: any } = {

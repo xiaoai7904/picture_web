@@ -45,6 +45,36 @@ export const RouterConfig = [
     path: '/recharge',
     name: 'recharge',
     component: React.lazy(() => import('@/pages/recharge/Recharge.view'))
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: React.lazy(() => import('@/pages/setting/Setting.view'))
+  },
+  {
+    path: '/help',
+    name: 'help',
+    component: React.lazy(() => import('@/pages/setting/Help.view'))
+  },
+  {
+    path: '/privacy',
+    name: 'privacy',
+    component: React.lazy(() => import('@/pages/setting/Privacy.view'))
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: React.lazy(() => import('@/pages/comment/Comment.view'))
+  },
+  {
+    path: '/customerService',
+    name: 'customerService',
+    component: React.lazy(() => import('@/pages/customerService/CustomerService.view'))
+  },
+  {
+    path: '/subscript',
+    name: 'subscript',
+    component: React.lazy(() => import('@/pages/subscription/Subscription.view'))
   }
 ];
 

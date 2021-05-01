@@ -109,15 +109,28 @@ export default function TagView() {
 
   return (
     <div className="tag">
-      <SearchBar placeholder="作品/模特/摄影师" onChange={(val: string) => searchEvent(val)} />
       {searchVal && (
         <div>
+          <SearchBar placeholder="作品/模特/摄影师" value={searchVal} onChange={(val: string) => searchEvent(val)} />
           <PageList httpRequest={httpRequest} httpParams={httpParams} />
         </div>
       )}
       {!searchVal && (
-        <div>
-          <PullToRefresh
+        <div className="tag-list">
+          <SearchBar placeholder="作品/模特/摄影师" value={searchVal} onChange={(val: string) => searchEvent(val)} />
+          <div className="tag-wrap">
+            <TagTitleView name="热门标签" />
+            <TagContentView list={tagList} type="tagId" />
+          </div>
+          <div className="tag-wrap">
+            <TagTitleView name="热门模特" />
+            <TagContentView list={modelList} type="modelId" />
+          </div>
+          <div className="tag-wrap">
+            <TagTitleView name="热门摄影师" />
+            <TagContentView list={authorList} type="authorId" />
+          </div>
+          {/* <PullToRefresh
             refreshing={refreshing}
             onRefresh={onRefreshFn}
             direction="down"
@@ -125,6 +138,7 @@ export default function TagView() {
             distanceToRefresh={25}
             indicator={{ deactivate: '下拉刷新' }}
             getScrollContainer={() => undefined}>
+            <SearchBar placeholder="作品/模特/摄影师" value={searchVal} onChange={(val: string) => searchEvent(val)} />
             <div className="tag-wrap">
               <TagTitleView name="热门标签" />
               <TagContentView list={tagList} type="tagId" />
@@ -137,7 +151,7 @@ export default function TagView() {
               <TagTitleView name="热门摄影师" />
               <TagContentView list={authorList} type="authorId" />
             </div>
-          </PullToRefresh>
+          </PullToRefresh> */}
         </div>
       )}
     </div>

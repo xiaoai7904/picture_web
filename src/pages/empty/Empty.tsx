@@ -12,22 +12,14 @@ export default function Empty() {
       ?.post(SystemConfig.getUserInfo, {})
       .then((data: any) => {
         globalStore.setUserInfo(data.data.data.userinfo);
-        PageHistory.replace('/home');
+        PageHistory.replace('/home')
       });
   };
 
-  getUserInfo();
+  getUserInfo()
 
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: '18px',
-      }}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center',fontSize: '18px' }}>
       数据加载中...
     </div>
   );

@@ -1,13 +1,55 @@
 .my {
   background-color: #f7f2ef;
+  &-header {
+    // display: flex;
+    // justify-content: flex-start;
+    // align-items: center;
+    padding: 20px 10px;
+    background-image: url('../../assets/images/model_top_bg.png');
+    background-size: cover;
+    color: #fff;
+    height: 150px;
+    &-usericon {
+      border-radius: 60px;
+    }
+    &-message {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100px;
+    }
+    &-username {
+      margin-left: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .name {
+      font-size: 16px;
+      color: #fff;
+      font-weight: 400;
+    }
+  }
   .am-button {
     vertical-align: -10px;
     margin-left: 10px;
   }
+  .am-whitespace {
+    height: 20px;
+    background: #f7f2ef;
+  }
+  .am-list-item .am-list-line .am-list-content {
+    color: #555;
+    font-size: 16px;
+  }
 }
 .my-text {
   font-size: 16px;
-  color: #108ee9;
+  color: #fff;
   cursor: pointer;
 }
 .my-info {

@@ -57,7 +57,7 @@ export default function Recharge() {
     <div className="recharge">
       {!payIng && (
         <>
-          <NavBar icon={<Icon type="left" />} onLeftClick={() => PageHistory.goBack()}>
+          <NavBar mode="light" icon={<Icon type="left" color="#8a8a8a"/>} onLeftClick={() => PageHistory.goBack()}>
             会员充值
           </NavBar>
           <div className="recharge-list">
@@ -68,7 +68,7 @@ export default function Recharge() {
                   className={activedIndex === index ? 'recharge-list-item actived-line' : 'recharge-list-item'}
                   onClick={() => actived(item, index)}>
                   <span className="recharge-list-item--title">
-                    {vipMap[item.vipGrade]}/{rechargeTypeMap[item.type]}
+                    {item.vipDate}天VIP
                   </span>
                   <span className="recharge-list-item--val">赠送{item.integral || 0}积分</span>
                   <div

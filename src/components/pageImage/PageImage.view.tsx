@@ -19,7 +19,7 @@ const PageImage = observer((props: PageImageProps) => {
 
   const pageImageState = useLocalStore(() => {
     return {
-      imageHeight: 400,
+      imageHeight: 560,
       orgHeight: 0,
       orgWidth: 0,
       isShow: false,
@@ -52,14 +52,17 @@ const PageImage = observer((props: PageImageProps) => {
 
   // 初始化
   const initImage = () => {
-    const img = (imgIns = imgIns || new Image());
-    img.onload = () => {
-      pageImageState.setOrgHeight(img.height);
-      pageImageState.setOrgWidth(img.width);
+    const img = new Image();
+    img.onload = (e: any) => {
+      // console.log(props.index, arg)
+      console.log(e.path[0].id, img.naturalWidth, img.naturalHeight);
+      pageImageState.setOrgHeight(img.naturalHeight);
+      pageImageState.setOrgWidth(img.naturalWidth);
       resizeImg();
     };
 
     img.src = props.src;
+    img.id = 'aaaa' + props.index;
   };
 
   let resizeEvent = Utils.debounce(() => {
@@ -71,9 +74,8 @@ const PageImage = observer((props: PageImageProps) => {
       // 遍历entries数组
       if (item.isIntersecting) {
         // 当前元素可见
-        console.log(props.index, 'Loaded new items', entries);
         pageImageState.setIsShow(true);
-        initImage();
+        // initImage();
         intersectionObserver.unobserve(item.target); // 停止观察当前元素 避免不可见时候再次调用callback函数
       }
     });
@@ -98,22 +100,35 @@ const PageImage = observer((props: PageImageProps) => {
 
     return () => {
       window.removeEventListener('resize', resizeEvent);
-      imgIns = null;
     };
   }, []);
 
   return (
-    <div id={`pageImage${props.index}`} className="page-image" style={{ height: pageImageState.imageHeight + 'px' }}>
+    <div
+      id={`pageImage${props.index}`}
+      className="page-image"
+      style={{ height: pageImageState.imageHeight + 'px' }}
+      data-org-width={pageImageState.orgWidth}
+      data-org-height={pageImageState.orgHeight}>
       <div
         className="page-image-bg"
         style={{ backgroundImage: `url(${pageImageState.isShow ? props.src : ''})` }}></div>
       <img
+        id={`pageImageImg${props.index}`}
         className="page-image-img"
         src={pageImageState.isShow ? props.src : ''}
         alt="haihai"
         width="100%"
         height="100%"
         draggable="true"
+        onLoad={() => {
+          let $$img: any = document.getElementById('pageImageImg' + props.index);
+          if ($$img) {
+            pageImageState.setOrgHeight($$img.naturalHeight);
+            pageImageState.setOrgWidth($$img.naturalWidth);
+            resizeImg();
+          }
+        }}
       />
     </div>
   );

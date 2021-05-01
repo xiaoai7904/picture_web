@@ -6,6 +6,9 @@ import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
 import PageHistory from '@/router/PageHistory';
 import '@/style/system.less';
+import vhCheck from 'vh-check'
+
+vhCheck()
 
 const App = observer(() => {
   const { globalStore } = useGlobalStore();

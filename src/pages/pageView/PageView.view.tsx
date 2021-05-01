@@ -21,12 +21,12 @@ export default observer(() => {
 
   return (
     <div className="page-view">
-      <TabBar prerenderingSiblingsNumber={0} unselectedTintColor="#949494" tintColor="#33A3F4" barTintColor="white">
+      <TabBar prerenderingSiblingsNumber={0} unselectedTintColor="#9e9e9e" tintColor="#c4937e" barTintColor="white">
         <TabBar.Item
           title="首页"
           key="Life"
           icon={<i className="iconfont icon-shouye" style={{ fontSize: '22px' }} />}
-          selectedIcon={<i className="iconfont icon-shouye" style={{ fontSize: '22px', color: '#108ee9' }} />}
+          selectedIcon={<i className="iconfont icon-shouye" style={{ fontSize: '22px', color: '#c4937e' }} />}
           selected={globalStore.selectedTab === 'home'}
           onPress={() => {
             globalStore.setSelectedTab('home');
@@ -36,7 +36,7 @@ export default observer(() => {
         </TabBar.Item>
         <TabBar.Item
           icon={<i className="iconfont icon-fenlei" style={{ fontSize: '22px' }} />}
-          selectedIcon={<i className="iconfont icon-fenlei" style={{ fontSize: '22px', color: '#108ee9' }} />}
+          selectedIcon={<i className="iconfont icon-fenlei" style={{ fontSize: '22px', color: '#c4937e' }} />}
           title="分类"
           key="Koubei"
           selected={globalStore.selectedTab === 'tag'}
@@ -48,7 +48,7 @@ export default observer(() => {
         </TabBar.Item>
         <TabBar.Item
           icon={<i className="iconfont icon-VIP" style={{ fontSize: '22px' }} />}
-          selectedIcon={<i className="iconfont icon-VIP" style={{ fontSize: '22px', color: '#108ee9' }} />}
+          selectedIcon={<i className="iconfont icon-VIP" style={{ fontSize: '22px', color: '#c4937e' }} />}
           title="VIP说明"
           key="Friend"
           selected={globalStore.selectedTab === 'vip'}
@@ -59,7 +59,7 @@ export default observer(() => {
         </TabBar.Item>
         <TabBar.Item
           icon={<i className="iconfont icon-wode" style={{ fontSize: '22px' }} />}
-          selectedIcon={<i className="iconfont icon-wode" style={{ fontSize: '22px', color: '#108ee9' }} />}
+          selectedIcon={<i className="iconfont icon-wode" style={{ fontSize: '22px', color: '#c4937e' }} />}
           title="我的"
           key="my"
           selected={globalStore.selectedTab === 'my'}

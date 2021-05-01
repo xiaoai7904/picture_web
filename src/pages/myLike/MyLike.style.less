@@ -4,7 +4,10 @@
   }
   &-tag {
       .list-view-section-body {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        // grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
       }
   }
   .am-list-footer > div {
@@ -25,6 +28,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 10px;
     &-text {
       color: #929292;
       font-size: 13px;
@@ -37,3 +41,4 @@
     }
   }
 }
+

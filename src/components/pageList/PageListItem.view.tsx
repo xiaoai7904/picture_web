@@ -1,7 +1,7 @@
 import React from 'react';
 import PageHistory from '@/router/PageHistory';
 
-const defaultImg = require('@/assets/images/404.jpg');
+const defaultImg = require('@/assets/images/defaultImg.png');
 
 export default function PageListItem(props: any) {
   const gotoPreview = (id: number) => {
@@ -13,7 +13,7 @@ export default function PageListItem(props: any) {
       <div className="page-list-item-img">
         <img
           src={rowData.coverImage}
-          alt=""
+          alt="嗨嗨美影社"
           width="100%"
           height="100%"
           onError={(e: any) => {

@@ -49,7 +49,7 @@ function SetPassword(props: any) {
 
   return (
     <div className="set-password">
-      <NavBar icon={<Icon type="left" />} onLeftClick={() => PageHistory.goBack()}>
+      <NavBar mode="light" icon={<Icon type="left" color="#8a8a8a"/>} onLeftClick={() => PageHistory.goBack()}>
         重置密码
       </NavBar>
       <div className="set-password-content">

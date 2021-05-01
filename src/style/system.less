@@ -1,3 +1,12 @@
+@import url('./common.less');
+// @import url('./create-panel-conf.less');
+// @import url('./disable.less');
+// @import url('./drag-size.less');
+// @import url('./full-screen.less');
+// @import url('./icon.less');
+// @import url('./menus.less');
+@import url('./panel.less');
+@import url('./text.less');
 body {
   overflow: hidden;
   font-family: Arial, Helvetica, SimSun, sans-serif;
@@ -33,4 +42,20 @@ input[type='number']::-webkit-outer-spin-button {
 .am-modal-popup .am-modal-content {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+}
+
+.am-tabs-default-bar-tab-active {
+  color: #c4937e !important;
+  font-weight: 700;
+}
+.am-tabs-default-bar-underline {
+  border: 1px solid #c4937e !important;
+}
+.am-tabs-default-bar-tab {
+  font-size: 15px;
+  color: #8a8a8a;
+  cursor: pointer;
+}
+.am-navbar-light .am-navbar-title {
+  color: #8a8a8a !important;
 }

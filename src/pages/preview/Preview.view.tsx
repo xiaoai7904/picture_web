@@ -12,6 +12,10 @@ import InfiniteScroll from 'react-infinite-scroller';
 import Utils from '@/module/utils/Utils';
 import PageHistory from '@/router/PageHistory';
 
+const alert = Modal.alert;
+
+const defaultImg = require('@/assets/images/defaultImg.png');
+
 interface resList {
   id: number;
   coverImage: string;
@@ -104,21 +108,19 @@ export default function Preview(props: any) {
         return <PageImage key={index} src={item.address} index={index} />;
       })}
       {/* <PageList httpParams={{ id: routerParamsId }} httpRequest={httpRequest} renderRow={renderRow}/> */}
-      {(!globalStore.userInfo.phone ||
-        globalStore.userInfo.remaining === 0 ||
-        globalStore.userInfo.vipGrade < resData.vipLevel) && (
+      {resData.login !== 2 && (
         <div className="preview-mask">
           <div className="preview-mask-box"></div>
         </div>
       )}
       <div className="preview-tips">
-        {globalStore.userInfo.vipGrade < resData.vipLevel && (
+        {resData.login === 1 && (
           <p>
             全本共<span className="em">{resData.photoNum}</span>，订阅：需
             <span className="em">{vipMap[resData.vipGrade]}</span>
           </p>
         )}
-        {!globalStore.userInfo.phone && (
+        {resData.login === 0 && (
           <>
             <p>您未登陆，请先登陆</p>
             <div className="btn-wrap">
@@ -128,7 +130,7 @@ export default function Preview(props: any) {
             </div>
           </>
         )}
-        {(globalStore.userInfo.remaining === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) && (
+        {resData.login === 1 && (
           <>
             <p>您的会员等级不够，请升级</p>
             <div className="btn-wrap">
@@ -184,7 +186,16 @@ const Recommend = (props: any) => {
             return (
               <div key={index} className="recommend-list-item" onClick={() => update(item.id)}>
                 <div className="recommend-list-item-img">
-                  <img src={item.coverImage} alt="" width="100%" height="100%" />
+                  <img
+                    src={item.coverImage}
+                    alt=""
+                    width="100%"
+                    height="100%"
+                    onError={(e: any) => {
+                      e.target.onerror = null;
+                      e.target.src = defaultImg;
+                    }}
+                  />
                   <span className="pic-number">{item.photoNum}</span>
                   {item.recommend === 1 && <span className="pic-recommend">推荐</span>}
                 </div>
@@ -223,6 +234,19 @@ const WorkDetailsView = (props: any) => {
   const gotoRecharge = () => {
     PageHistory.push('/recharge');
   };
+
+  const tips = () => {
+    alert('提示', '您未登录，是否马上登录？', [
+      { text: '取消', onPress: () => {}, style: 'default' },
+      {
+        text: '确定',
+        onPress: () => {
+          gotoLogin();
+        },
+      },
+    ]);
+  };
+
   // 评论
   const httpComment = (params: commentParams) => {
     return new Promise((resolve, reject) => {
@@ -275,15 +299,19 @@ const WorkDetailsView = (props: any) => {
   };
   // 点赞
   const starEvent = () => {
-    Toast.loading('加载中...');
-    Http.of()
-      ?.post(SystemConfig.articleStar, { id: resData.id })
-      .then((data: any) => {
-        let n = starNumber;
-        setStar(data.data.data.result === 1 ? true : false);
-        setStarNumber(data.data.data.result === 1 ? ++n : --n);
-        Toast.hide();
-      });
+    if (resData.login === 0) {
+      tips();
+    } else {
+      Toast.loading('加载中...');
+      Http.of()
+        ?.post(SystemConfig.articleStar, { id: resData.id })
+        .then((data: any) => {
+          let n = starNumber;
+          setStar(data.data.data.result === 1 ? true : false);
+          setStarNumber(data.data.data.result === 1 ? ++n : --n);
+          Toast.hide();
+        });
+    }
   };
   // 评论
   const commentEvent = () => {
@@ -314,15 +342,19 @@ const WorkDetailsView = (props: any) => {
   };
   // 删除评论
   const delComment = (id: number) => {
-    Toast.loading('加载中...');
-    Http.of()
-      ?.post(SystemConfig.delComment, { id })
-      .then(() => {
-        updateScrollTop();
-        setHasMore(true);
-        setCommentRequestPage(2);
-        httpCommentList({ articleId: resData.id, page: 1, pageSize: 20 }, true);
-      });
+    if (resData.login === 0) {
+      tips();
+    } else {
+      Toast.loading('加载中...');
+      Http.of()
+        ?.post(SystemConfig.delComment, { id })
+        .then(() => {
+          updateScrollTop();
+          setHasMore(true);
+          setCommentRequestPage(2);
+          httpCommentList({ articleId: resData.id, page: 1, pageSize: 20 }, true);
+        });
+    }
   };
   // 滚动加载数据
   const loadFunc = () => {
@@ -339,34 +371,38 @@ const WorkDetailsView = (props: any) => {
 
   // 关注作者和模特
   const likeEvent = (type: number) => {
-    const httpRequest = (url: string, params: { [key: string]: number }) => {
-      Toast.loading('加载中...');
-      Http.of()
-        ?.post(url, params)
-        .then((data: any) => {
-          Toast.success(data.data.data.result === 1 ? '关注成功' : '取消成功');
-          let _personInfo = Utils.deepClone(personInfo);
-          _personInfo.forEach((item: any) => {
-            if (item.id === type) {
-              item.isLike = data.data.data.result === 1;
-            }
+    if (resData.login === 0) {
+      tips();
+    } else {
+      const httpRequest = (url: string, params: { [key: string]: number }) => {
+        Toast.loading('加载中...');
+        Http.of()
+          ?.post(url, params)
+          .then((data: any) => {
+            Toast.success(data.data.data.result === 1 ? '关注成功' : '取消成功');
+            let _personInfo = Utils.deepClone(personInfo);
+            _personInfo.forEach((item: any) => {
+              if (item.id === type) {
+                item.isLike = data.data.data.result === 1;
+              }
+            });
+            setPersonInfo(_personInfo);
           });
-          setPersonInfo(_personInfo);
-        });
-    };
+      };
 
-    const obj: any = {
-      1: {
-        url: SystemConfig.modelFollow,
-        params: { modelId: resData.modelId },
-      },
-      2: {
-        url: SystemConfig.authorFollow,
-        params: { authorId: resData.authorId },
-      },
-    };
+      const obj: any = {
+        1: {
+          url: SystemConfig.modelFollow,
+          params: { modelId: resData.modelId },
+        },
+        2: {
+          url: SystemConfig.authorFollow,
+          params: { authorId: resData.authorId },
+        },
+      };
 
-    httpRequest(obj[type].url, obj[type].params);
+      httpRequest(obj[type].url, obj[type].params);
+    }
   };
 
   useEffect(() => {
@@ -428,11 +464,12 @@ const WorkDetailsView = (props: any) => {
             点击登陆
           </Button>
         )}
-        {(globalStore.userInfo.remaining === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) && (
-          <Button className="btn" inline size="small" type="primary" onClick={() => gotoRecharge()}>
-            开通VIP
-          </Button>
-        )}
+        {(globalStore.userInfo.remaining === 0 || globalStore.userInfo.vipGrade < resData.vipLevel) &&
+          globalStore.userInfo.phone && (
+            <Button className="btn" inline size="small" type="primary" onClick={() => gotoRecharge()}>
+              开通VIP
+            </Button>
+          )}
       </div>
 
       <Modal popup visible={detailsModalShow} onClose={closeDetailsModal} animationType="slide-up">
@@ -450,9 +487,9 @@ const WorkDetailsView = (props: any) => {
                     <span className="details-person-type">{item.type}</span>
                     <span className="details-person-name">{item.name}</span>
                   </div>
-                  <button className="details-person-like" onClick={() => likeEvent(item.id)}>
-                    {item.isLike ? '取消关注' : '喜欢TA'}
-                  </button>
+                  {resData.login !== 0  && <button className="details-person-like" onClick={() => likeEvent(item.id)}>
+                    {item.isLike ? '取消喜欢' : '喜欢TA'}
+                  </button>}
                 </div>
               );
             })}
@@ -505,9 +542,10 @@ const WorkDetailsView = (props: any) => {
               {...getFieldProps('commentText')}
               value={commentVal}
               placeholder="请输入评论"
+              disabled={resData.login === 0}
               onChange={val => setCommentVal(val)}
               extra={
-                <span className="comment-send" onClick={() => sendComment()}>
+                resData.login !== 0 && <span className="comment-send" onClick={() => sendComment()}>
                   发送
                 </span>
               }></InputItem>

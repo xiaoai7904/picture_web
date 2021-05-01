@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NavBar, Icon, PullToRefresh, Toast } from 'antd-mobile';
+import { NavBar, Icon, Modal, PullToRefresh, Toast } from 'antd-mobile';
 import PageHistory from '@/router/PageHistory';
 import InfiniteScroll from 'react-infinite-scroller';
 import PageListViewItem from '@/components/pageList/PageListItem.view';
@@ -7,7 +7,10 @@ import PageList from '@/components/pageList/PageList.view';
 import Http from '@/module/http/Http';
 import SystemConfig from '@/module/systemConfig/SystemConfig';
 import Utils from '@/module/utils/Utils';
+import { useGlobalStore } from '@/store/StoreContext';
 import './HomePage.style.less';
+
+const alert = Modal.alert;
 
 interface homeInfo {
   name?: string;
@@ -22,33 +25,74 @@ interface homeInfo {
  * 个人主页
  */
 export default function HomePage() {
+  let { globalStore } = useGlobalStore();
   const location: any = PageHistory.location;
   const [info, setInfo] = useState<homeInfo>({});
   const [requestParams, setRequestParams] = useState({});
   const [showNavBar, setShowNavBar] = useState(true);
+  const userinfo = globalStore.userInfo;
+
+  const tips = () => {
+    alert('提示', '您未登录，是否马上登录？', [
+      { text: '取消', onPress: () => {}, style: 'default' },
+      {
+        text: '确定',
+        onPress: () => {
+          PageHistory.push(`/login`);
+        },
+      },
+    ]);
+  };
 
   const httpRequest = (params: any) => {
     return Http.of()?.post(SystemConfig.articleSearch, params);
   };
 
-  const likeEvent = () => {
+  const requestIsSubscript = () => {
     const obj: any = {
-      modelId: SystemConfig.modelFollow,
-      authorId: SystemConfig.authorFollow,
+      authorId: 1,
+      modelId: 2,
     };
     Http.of()
-      ?.post(obj[location.state.key], { [location.state.key]: location.state.params.id })
+      ?.post(SystemConfig.isSubscribe, {
+        subscribeId: location.state.params.id || location.state.params.subscribeId,
+        subscribeType: obj[location.state.key],
+      })
       .then((data: any) => {
-        Toast.success(data.data.data.result === 1 ? '关注成功' : '取消成功');
-        setInfo(Object.assign({}, info, { isStar: data.data.data.result }));
+        setInfo(Object.assign({}, location.state.params, { isStar: data.data.data.result }));
+      })
+      .catch(() => {
+        setInfo(location.state.params);
       });
+  };
+
+  const likeEvent = () => {
+    if (!userinfo.phone) {
+      tips();
+    } else {
+      const obj: any = {
+        modelId: { subscribeId: location.state.params.id || location.state.params.subscribeId, subscribeType: 2 },
+        authorId: { subscribeId: location.state.params.id || location.state.params.subscribeId, subscribeType: 1 },
+      };
+      Http.of()
+        ?.post(SystemConfig.authorSubscribe, obj[location.state.key])
+        .then((data: any) => {
+          Toast.success(data.data.data.result === 1 ? '订阅成功' : '取消成功');
+          setInfo(Object.assign({}, info, { isStar: data.data.data.result }));
+        });
+    }
   };
 
   useEffect(() => {
     if (location.state) {
       setShowNavBar(location.state.key !== 'tagId');
-      setInfo(location.state.params);
-      setRequestParams({ [location.state.key]: location.state.params.id });
+      // setInfo(location.state.params);
+      setRequestParams({ [location.state.key]: location.state.params.id || location.state.params.subscribeId });
+      if (location.state.key !== 'tagId') {
+        requestIsSubscript();
+      } else {
+        setInfo(location.state.params);
+      }
     } else {
       PageHistory.replace('/home');
     }
@@ -57,18 +101,18 @@ export default function HomePage() {
   return (
     <div className="home-page">
       {!showNavBar && (
-        <NavBar mode="dark" icon={<Icon type="left" />} onLeftClick={() => PageHistory.goBack()}>
+        <NavBar mode="light" icon={<Icon type="left" color="#8a8a8a" />} onLeftClick={() => PageHistory.goBack()}>
           作品列表
         </NavBar>
       )}
       {showNavBar && (
         <NavBar
-          mode="dark"
-          icon={<Icon type="left" />}
+          mode="light"
+          icon={<Icon type="left" color="#8a8a8a" />}
           onLeftClick={() => PageHistory.goBack()}
           rightContent={[
             <div className="home-page-follow" onClick={() => likeEvent()}>
-              {info.isStar === 1 ? '取消关注' : '关注TA'}
+              {info.isStar === 1 ? '取消订阅' : '订阅TA'}
             </div>,
           ]}>
           TA的主页

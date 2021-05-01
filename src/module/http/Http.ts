@@ -44,9 +44,10 @@ export default class Http {
         if (response.status === 200 && response.data && response.data.code === 0) {
           return Promise.resolve(response);
         }
-        if (response.data && response.data.code === 10003) {
-          Toast.fail('登录已过期');
+        if (response.data && (response.data.code === 20006 || response.data.code === 10003)) {
+          // Toast.fail('登录已过期');
           // PageHistory.replace('/login');
+          localStorage.removeItem('token');
           return Promise.reject(response);
         }
 
